@@ -1,0 +1,9 @@
+django
+uwsgi
+psycopg2
+django_jenkins 
+django-rest-swagger
+djangorestframework
+celery
+django-celery
+
