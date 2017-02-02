@@ -26,7 +26,9 @@
      docker run -itd --name hoyai_dev -p 2266:2266 -p 5432:5432 -p 8000:8000 --volume /root/data/:/root/lib/ hoyai/client:v0.1
    ```
 <b>7.Connect hoyai_dev directly and Change root password</b> </br>
-   - docker exec -it hoyai_dev bash
+   ```bash
+      docker exec -it hoyai_dev bash
+   ```
    ```bash
        passwd root
    ```
