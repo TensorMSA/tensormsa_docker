@@ -38,6 +38,11 @@
    - Connect AWS, Port : 2266 
 
 <b>9.Run Pycharm </b> </br>
-   - putty -> connection -> ssh -> X11 -> Enable X11 forwarding check
-   - Connect AWS, Port : 2266 
+   ```bash
+       /home/dev/pyc/bin/pycharm.sh &
+   ```
    
+ <b>9.Run Pycharm </b> </br>
+   ```bash
+       /home/dev/pyc/bin/pycharm.sh &
+   ```
