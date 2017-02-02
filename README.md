@@ -4,45 +4,42 @@
 # Install
 
 <b>1.Install Xming </b> </br>
-   - download Xming : https://sourceforge.net/projects/xming/
+   - download Xming : https://sourceforge.net/projects/xming/ </br>
    - install 
 
-   ```python
-       bash /home/user/Downloads/Anaconda2-4.1.1-Linux-x86_64.sh
-   ```
-   ```python
-       vi ~/.bashrc
-       export PATH="$HOME/anaconda2/bin;$PATH"
-   ```
-
 <b>2.Install Putty</b> </br>
-   - install putty :  http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html? </br>
+   - install putty :  http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html? 
 
-   ```python
-       conda create -n tensorflow python=2.7
-       source activate tensorflow
-       conda install -c conda-forge tensorflow
+<b>3.Connect AWS EC2 Instance</b> </br>
+   - .....</br>
+
+<b>4.Git clone</b> </br>
+
+<b>5.Docker build</b> </br>
+   - docker build --rm -t hoyai/client:v0.1 .
+   - You can change name and version [hoyai/client:v0.1] </br>
+   
+<b>6.Docker run</b> </br>
+   - docker run -itd --name hoyai_dev -p 2266:2266 -p 5432:5432 -p 8000:8000 --volume /root/data/:/root/lib/ hoyai/client:v0.1
+
+<b>7.Connect hoyai_dev directly and Change root password</b> </br>
+   - docker exec -it hoyai_dev bash
+   ```bash
+       passwd root
    ```
+ 
+ <b>8.Connect hoyai_dev by ssh </b> </br>
+   - putty -> connection -> ssh -> X11 -> Enable X11 forwarding check
+   - Connect AWS, Port : 2266 
 
-<b>3.Install Django</b> </br>
-   - install Django, Django Rest Framework and Postgresql plugin</br>
-
-   ```python
-       [Django]
-       conda install -c anaconda django=1.9.5
-       [Django Rest Frame Work]
-       conda install -c ioos djangorestframework=3.3.3
-       [postgress plugin]
-       conda install -c anaconda psycopg2=2.6.1
-       [pygments]
-       conda install -c anaconda pygments=2.1.3
-   ```
-
-<b>4.Install Postgresql</b> </br>
-
-   - install</br>
-   ```python
-       yum install postgresql-server
+ <b>9.Run pycharm </b> </br>
+   - putty -> connection -> ssh -> X11 -> Enable X11 forwarding check
+   - Connect AWS, Port : 2266 
+   
+   - You can change name and version [hoyai/client:v0.1] </br>   
+   ```bash 
+       cd /dev/home/pyc/bin
+       ./pycharm.sh &
    ```
 
    - check account and set pass</br>
