@@ -148,7 +148,7 @@ RUN mv pycharm-community-2016.3.2 pyc
 #############################################################################
 # firefox                                                                   #
 #############################################################################
-RUN apt-get update && apt-get install -y firefox && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libglu1 firefox && rm -rf /var/lib/apt/lists/*
 
 
 #############################################################################
@@ -160,6 +160,29 @@ RUN git clone https://github.com/TensorMSA/hoyai.git
 
 RUN echo "export PYTHON_HOME=/opt/conda" >> ~/.bashrc
 RUN echo "export PATH=${PYTHON_HOME}/bin:$PATH" >> ~/.bashrc
+
+
+#############################################################################
+# chrome                                                                    #
+#############################################################################
+RUN mkdir /home/Download
+RUN cd /home/Download
+WORKDIR /home/Download
+#RUN apt-get update && apt-get install -y libgconf2-4 libnss3-1d libxss1 && rm -rf /var/lib/apt/lists/*
+#RUN apt-get install -f
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN dpkg -i ./google-chrome*.deb; exit 0
+RUN apt-get update
+RUN apt-get install -f -y
+RUN dpkg -i ./google-chrome*.deb;
+
+
+#############################################################################
+# naver nanum font                                                          #
+#############################################################################
+RUN apt-get update && apt-get install -y fonts-nanum && rm -rf /var/lib/apt/lists/*
+
+
 
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
