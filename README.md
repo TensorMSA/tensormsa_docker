@@ -3,6 +3,21 @@
 
 # Install
 
+<b>History</b> </br>
+ - 16.2.3             Initial</br>
+ - 16.2.4             Firefox Fix, Chrome Installed, Korean Font Installed/br>
+
+<b>Summeries</b> </br>
+ - python 3.5
+ - conda
+ - Tensorflow r0.12
+ - Django
+ - postgres 9.6
+ - Pycharm Comunity 
+ - Chrome
+ - python packages for hoyai
+ 
+
 <b>1.Install Xming </b> </br>
    - download Xming : https://sourceforge.net/projects/xming/ </br>
    - install 
@@ -42,7 +57,7 @@
        /home/dev/pyc/bin/pycharm.sh &
    ```
    
- <b>9.Run Pycharm </b> </br>
+ <b>10.Run Chrome </b> </br>
    ```bash
-       /home/dev/pyc/bin/pycharm.sh &
+       /usr/bin/google-chrome --no-sandbox
    ```
