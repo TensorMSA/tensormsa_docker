@@ -5,7 +5,7 @@
 
 <b>History</b> </br>
  - 16.2.3             Initial</br>
- - 16.2.4             Firefox Fix, Chrome Installed, Korean Font Installed/br>
+ - 16.2.4             Firefox Fix, Chrome Installed, Korean Font Installed</br>
 
 <b>Summeries</b> </br>
  - python 3.5
