@@ -38,7 +38,7 @@
    
 <b>6.Docker run</b> </br>
    ```bash
-     docker run -itd --name hoyai_dev -p 2266:2266 -p 5432:5432 -p 8000:8000 --volume /root/data/:/root/lib/ hoyai/client:v0.1
+     docker run -itd --name hoyai_dev -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 8888:8888 --volume /root/data/:/root/lib/ hoyai/client:v0.1
    ```
 <b>7.Connect hoyai_dev directly and Change root password</b> </br>
    ```bash
