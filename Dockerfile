@@ -182,6 +182,8 @@ RUN dpkg -i ./google-chrome*.deb;
 #############################################################################
 RUN apt-get update && apt-get install -y fonts-nanum && rm -rf /var/lib/apt/lists/*
 
+RUN cd /home/dev/hoyai
+WORKDIR /home/dev/hoyai
 
 
 
