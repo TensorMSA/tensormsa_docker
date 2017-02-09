@@ -21,7 +21,7 @@
    apt-get install aptitude
    aptitude install pgadmin3
    apt-get install pgadmin3=1.22.0-1 pgadmin3-data=1.22.0-1
-   ```</br>
+   ```
 
 <b>1.Install Xming </b> </br>
    - download Xming : https://sourceforge.net/projects/xming/ </br>
