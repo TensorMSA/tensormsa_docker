@@ -1,9 +1,8 @@
-django
-uwsgi
-psycopg2
-django_jenkins 
-django-rest-swagger
-djangorestframework
-celery
-django-celery
-
+django==1.10.5
+uwsgi==2.0.14
+psycopg2==2.6.2
+django_jenkins==0.110.0
+django-rest-swagger==2.1.1
+djangorestframework==3.5.3
+celery==4.0.2
+django-celery==3.2.1

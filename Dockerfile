@@ -84,9 +84,9 @@ RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-k
  && rm -rf ${PG_HOME} \
  && rm -rf /var/lib/apt/lists/*
 
-COPY runtime/ ${PG_APP_HOME}/
-COPY entrypoint.sh /sbin/entrypoint.sh
-RUN chmod 755 /sbin/entrypoint.sh
+#COPY runtime/ ${PG_APP_HOME}/
+#COPY entrypoint.sh /sbin/entrypoint.sh
+#RUN chmod 755 /sbin/entrypoint.sh
 
 EXPOSE 5432/tcp
 VOLUME ["${PG_HOME}", "${PG_RUNDIR}"]
@@ -144,6 +144,7 @@ RUN wget https://download.jetbrains.com/python/pycharm-community-2016.3.2.tar.gz
  
 RUN tar -xvf pycharm-community-2016.3.2.tar.gz
 RUN mv pycharm-community-2016.3.2 pyc
+RUN ln -s /home/dev/pyc/bin/pycharm.sh /usr/bin/pycharm
 
 #############################################################################
 # firefox                                                                   #
@@ -160,7 +161,7 @@ RUN git clone https://github.com/TensorMSA/hoyai.git
 
 RUN echo "export PYTHON_HOME=/opt/conda" >> ~/.bashrc
 RUN echo "export PATH=${PYTHON_HOME}/bin:$PATH" >> ~/.bashrc
-
+RUN echo "export HOSTNAME=`hostname`" >> ~/.bashrc
 
 #############################################################################
 # chrome                                                                    #
@@ -182,8 +183,45 @@ RUN dpkg -i ./google-chrome*.deb;
 #############################################################################
 RUN apt-get update && apt-get install -y fonts-nanum && rm -rf /var/lib/apt/lists/*
 
+#############################################################################
+# pgadmin3                                                          #
+#############################################################################
+RUN apt-get update && apt-get install -y aptitude
+RUN aptitude install -y pgadmin3
+RUN apt-get install -y pgadmin3=1.22.0-1 pgadmin3-data=1.22.0-1&& rm -rf /var/lib/apt/lists/*
+
+#############################################################################
+# korean pack                                                       #
+#############################################################################
+RUN apt-get update && apt-get install -y language-pack-ko
+RUN apt-get install -y language-pack-ko-base&& rm -rf /var/lib/apt/lists/*
+
+RUN echo "LANG=\"ko_KR.UTF-8\"" >> ~/.bashrc
+
+
 RUN cd /home/dev/hoyai
 WORKDIR /home/dev/hoyai
+
+
+#############################################################################
+# vnc server                                                       #
+#############################################################################
+ENV DISPLAY :1
+ENV VNC_COL_DEPTH 24
+ENV VNC_RESOLUTION 1920x1080
+ENV VNC_PW vncpassword
+
+RUN apt-get update && apt-get upgrade -y && apt-get install -y supervisor vim xfce4 vnc4server wget && rm -rf /var/lib/apt/
+EXPOSE 5901
+
+
+ADD .vnc /root/.vnc
+ADD scripts /root/scripts
+RUN chmod +x /root/.vnc/xstartup /etc/X11/xinit/xinitrc /root/scripts/*.sh 
+
+COPY runtime/ ${PG_APP_HOME}/
+COPY entrypoint.sh /sbin/entrypoint.sh
+RUN chmod 755 /sbin/entrypoint.sh
 
 
 

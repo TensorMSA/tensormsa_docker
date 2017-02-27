@@ -1,56 +1,16 @@
 #!/bin/bash
-set -e
-source ${PG_APP_HOME}/functions
-
-[[ ${DEBUG} == true ]] && set -x
-
-# allow arguments to be passed to postgres
-if [[ ${1:0:1} = '-' ]]; then
-  EXTRA_ARGS="$@"
-  set --
-elif [[ ${1} == postgres || ${1} == $(which postgres) ]]; then
-  EXTRA_ARGS="${@:2}"
-  set --
-fi
-
-# default behaviour is to launch postgres
-if [[ -z ${1} ]]; then
-  map_uidgid
-
-  create_datadir
-  create_certdir
-  create_logdir
-  create_rundir
-
-  set_resolvconf_perms
-
-  configure_postgresql
-  echo "Starting ssh demon"
-  service ssh start 
-
-  echo "Starting PostgreSQL ${PG_VERSION}..."
-  exec start-stop-daemon --start --chuid ${PG_USER}:${PG_USER} \
-    --exec ${PG_BINDIR}/postgres -- -D ${PG_DATADIR} ${EXTRA_ARGS}&
-
-else
-  exec "$@"
-fi
-#echo "Starting ssh demon"
-#service ssh start 
-
-#very important starting bash shell
 
 #resolve_vnc_connection
 VNC_IP=$(ip addr show eth0 | grep -Po 'inet \K[\d.]+')
 VNC_PORT="590"${DISPLAY:1}
-#NO_VNC_PORT="690"${DISPLAY:1}
+NO_VNC_PORT="690"${DISPLAY:1}
 
 ##change vnc password
 echo "change vnc password!"
 (echo $VNC_PW && echo $VNC_PW) | vncpasswd
 
 ##start vncserver and noVNC webclient
-#$NO_VNC_HOME/utils/launch.sh --vnc $VNC_IP:$VNC_PORT --listen $NO_VNC_PORT &
+$NO_VNC_HOME/utils/launch.sh --vnc $VNC_IP:$VNC_PORT --listen $NO_VNC_PORT &
 vncserver -kill :1 && rm -rfv /tmp/.X* ; echo "remove old vnc locks to be a reattachable container"
 vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION
 sleep 1
@@ -73,5 +33,3 @@ case $i in
     ;;
 esac
 done
-
-/bin/bash
