@@ -15,8 +15,13 @@
  - postgres 9.6
  - Pycharm Comunity 
  - Chrome
- - python packages for hoyai
+ - python packages for hoyai</br>
  
+    ```bash
+   apt-get install aptitude
+   aptitude install pgadmin3
+   apt-get install pgadmin3=1.22.0-1 pgadmin3-data=1.22.0-1
+   ```
 
 <b>1.Install Xming </b> </br>
    - download Xming : https://sourceforge.net/projects/xming/ </br>
@@ -38,7 +43,9 @@
    
 <b>6.Docker run</b> </br>
    ```bash
-     docker run -itd --name hoyai_dev -p 2266:2266 -p 5432:5432 -p 8000:8000 --volume /root/data/:/root/lib/ hoyai/client:v0.1
+     docker run -itd --name hoyai_dev -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 8888:8888 --volume /root/data/:/root/lib/ hoyai/client:v0.1
+     
+     docker run -itd  --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --name hoyai_dev -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 8888:8888 --volume /root/data/:/root/lib/ hoyai/client:v0.1
    ```
 <b>7.Connect hoyai_dev directly and Change root password</b> </br>
    ```bash

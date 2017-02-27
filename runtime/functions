@@ -254,7 +254,7 @@ initialize_database() {
   fi
 
   # allow remote connections to postgresql database
-  set_hba_param "host all all 0.0.0.0/0 md5"
+  set_hba_param "host all all 0.0.0.0/0 trust"
 }
 
 set_resolvconf_perms() {
