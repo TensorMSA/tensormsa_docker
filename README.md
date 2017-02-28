@@ -15,7 +15,10 @@
  - postgres 9.6
  - Pycharm Comunity 
  - Chrome
- - python packages for hoyai</br>
+ - python packages for hoyai
+ - rabbit mq
+ - hdfview
+ - vnc xfce4 setup</br>
  
     ```bash
    apt-get install aptitude
