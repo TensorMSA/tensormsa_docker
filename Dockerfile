@@ -161,21 +161,27 @@ RUN git clone https://github.com/TensorMSA/hoyai.git
 
 RUN echo "export PYTHON_HOME=/opt/conda" >> ~/.bashrc
 RUN echo "export PATH=${PYTHON_HOME}/bin:$PATH" >> ~/.bashrc
-RUN echo "export HOSTNAME=`hostname`" >> ~/.bashrc
+#RUN echo "export HOSTNAME=`hostname`" >> ~/.bashrc
 
 #############################################################################
 # chrome                                                                    #
 #############################################################################
-RUN mkdir /home/Download
-RUN cd /home/Download
-WORKDIR /home/Download
+#RUN mkdir /home/Download
+#RUN cd /home/Download
+#WORKDIR /home/Download
 #RUN apt-get update && apt-get install -y libgconf2-4 libnss3-1d libxss1 && rm -rf /var/lib/apt/lists/*
 #RUN apt-get install -f
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg -i ./google-chrome*.deb; exit 0
-RUN apt-get update
-RUN apt-get install -f -y
-RUN dpkg -i ./google-chrome*.deb;
+#RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+#RUN dpkg -i ./google-chrome*.deb; exit 0
+#RUN apt-get update
+#RUN apt-get install -f -y
+#RUN dpkg -i ./google-chrome*.deb;
+RUN apt-get update \
+    && apt-get install -y chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg \
+    && rm -rf /var/lib/apt/ \
+    && ln -s /usr/bin/chromium-browser /usr/bin/google-chrome \
+    # fix to start chromium in a Docker container
+    && echo "CHROMIUM_FLAGS='--no-sandbox --start-maximized --user-data-dir'" > ~/.chromium-browser.init
 
 
 #############################################################################
@@ -208,7 +214,7 @@ WORKDIR /home/dev/hoyai
 #############################################################################
 ENV DISPLAY :1
 ENV VNC_COL_DEPTH 24
-ENV VNC_RESOLUTION 1920x1080
+ENV VNC_RESOLUTION 1280x1024
 ENV VNC_PW vncpassword
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y supervisor vim xfce4 vnc4server wget && rm -rf /var/lib/apt/
@@ -224,6 +230,20 @@ COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh
 
 
+#############################################################################
+# raabbitmq-server                                                 #
+#############################################################################
+
+RUN apt-get update && apt-get install -y rabbitmq-server && rm -rf /var/lib/apt/
+EXPOSE 5672
+
+#############################################################################
+# raabbitmq-server                                                 #
+#############################################################################
+RUN apt-get update && apt-get install -y hdfview && rm -rf /var/lib/apt/
+
+
+#ENV HOSTNAME hostname
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 

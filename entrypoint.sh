@@ -73,5 +73,17 @@ case $i in
     ;;
 esac
 done
+echo -e "\n------------------ rabbitmq server started ------------------"
+service rabbitmq-server start
+#echo -e "\n------------------ rabbitmq add user       ------------------"
+if [[ -z $(rabbitmqctl list_users | grep tensormsa) ]]; then
+  echo "rabbitmq Tensormsa add user" 
+  rabbitmqctl add_user tensormsa tensormsa
+fi
+
+if [[ -z $(rabbitmqctl list_users | grep tensormsa) ]]; then
+  echo "rabbitmq Tensormsa set user "
+  rabbitmqctl set_user_tags tensormsa administrator
+fi
 
 /bin/bash
