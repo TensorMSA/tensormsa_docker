@@ -73,11 +73,13 @@
    - Service enable & start</br>
    ```bash
       sudo systemctl enable docker_hoyai.service
+      
       sudo systemctl start docker_hoyai.service
    ```
    - Service disable & stop</br>
    ```bash
       sudo systemctl disable docker_hoyai.service
+      
       sudo systemctl stop docker_hoyai.service
    ```
  
@@ -86,7 +88,7 @@
 <b>7. Install VNC</b> </br>
    chrome app store
    VNC Viewer for Google Chrome
-   
+   <img src="https://raw.githubusercontent.com/seungwookim/TensorMSA/master/ProjectDesc3.png" width="750"/>
    
    <b>1.Install Xming </b> </br>
    - download Xming : https://sourceforge.net/projects/xming/ </br>
