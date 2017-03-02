@@ -30,14 +30,15 @@
    
 <b>1.Prerequisite </b> </br>
    - Docker 1.13 on ubuntu 16.04</br>
-   * How to install : https://docs.docker.com/engine/installation/linux/ubuntu/ </br>    
+   - How to install : https://docs.docker.com/engine/installation/linux/ubuntu/ <br>
+   - Add 127.0.0.1 ip-xxx-xx-x-xx to /etc/hosts<br>
    
 <b>2.User add ubuntu </b> </br>
    ```bash
      sudo groupadd docker
      sudo gpasswd -a ubuntu docker
    ```
-   * Test command : docker ps(By ubuntu id)
+   * Test command : docker ps(By ubuntu id) - restart AWS 
 
 <b>3.Download Docker Images </b> </br>
    ```bash
@@ -69,6 +70,10 @@
 
      [Install]
      WantedBy=default.target
+   ``` 
+   - In VI - E212: Can't open file for writing</br>
+   ```
+      :w !sudo tee % > /dev/null
    ``` 
    - Service enable & start</br>
    ```bash
