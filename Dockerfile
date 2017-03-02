@@ -47,8 +47,8 @@ RUN pip install --upgrade pip
 ##############################################################################
 # tensorflow
 ##############################################################################
-
-ENV TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.12.1-cp35-cp35m-linux_x86_64.whl
+ENV TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.0.0-cp34-cp34m-linux_x86_64.whl
+#ENV TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.12.1-cp35-cp35m-linux_x86_64.whl
 RUN pip install --upgrade -I setuptools
 RUN pip install --upgrade $TF_BINARY_URL
 
