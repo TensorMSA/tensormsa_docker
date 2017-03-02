@@ -6,6 +6,7 @@
 <b>History</b> </br>
  - 16.2.3             Initial</br>
  - 16.2.4             Firefox Fix, Chrome Installed, Korean Font Installed</br>
+ - 16.3.1             Tensorflow 1.0, RabbitMQ, Vnc Server, Xfce4 Installed  </br>
 
 <b>Summeries</b> </br>
  - python 3.5
@@ -16,6 +17,7 @@
  - Pycharm Comunity 
  - Chrome
  - python packages for hoyai
+ - pgadmin3
  - rabbit mq
  - hdfview
  - vnc xfce4 setup</br>
@@ -25,8 +27,68 @@
    aptitude install pgadmin3
    apt-get install pgadmin3=1.22.0-1 pgadmin3-data=1.22.0-1
    ```
+   
+<b>1.Prerequisite </b> </br>
+   - Docker 1.13 on ubuntu 16.04</br>
+   * How to install : https://docs.docker.com/engine/installation/linux/ubuntu/ </br>    
+   
+<b>2.User add ubuntu </b> </br>
+   ```bash
+     sudo groupadd docker
+     sudo gpasswd -a ubuntu docker
+   ```
+   * Test command : docker ps(By ubuntu id)
 
-<b>1.Install Xming </b> </br>
+<b>3.Download Docker Images </b> </br>
+   ```bash
+     docker pull hoyai/hoyai_dev_docker
+   ```
+<b>4.Run Docker Container </b> </br>
+   - Changes Resolution for vnc = VNC_RESOLUTION=<b>"1920x1080"</b> </br>
+   ```bash
+     docker run -itd --env="VNC_RESOLUTION=1920x1080" --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --name hoyai_dev -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 8888:8888 -p 5901:5901 hoyai/hoyai_dev_docker
+   ```
+
+<b>5. Register Docker Service</b> </br>
+   ```bash
+     cd /etc/systemd/system/
+     vi docker_hoyai.service     
+   ```
+
+   - docker_hoyai.service
+   ```bash
+     [Unit]
+     Description=hoyai container
+     Requires=docker.service
+     After=docker.service
+
+     [Service]
+     Restart=always
+     ExecStart=/usr/bin/docker start -a hoyai_dev
+     ExecStop=/usr/bin/docker stop -t 2 hoyai_dev
+
+     [Install]
+     WantedBy=default.target
+   ``` 
+   - Service enable & start
+   ```bash
+      sudo systemctl enable docker_hoyai.service
+      sudo systemctl start docker_hoyai.service
+   ```
+   - Service disable & stop
+   ```bash
+      sudo systemctl disable docker_hoyai.service
+      sudo systemctl stop docker_hoyai.service
+   ```
+ 
+<b>6. Restart aws</b> </br>
+
+<b>7. Install VNC</b> </br>
+   chrome app store
+   VNC Viewer for Google Chrome
+   
+   
+   <b>1.Install Xming </b> </br>
    - download Xming : https://sourceforge.net/projects/xming/ </br>
    - install 
 
