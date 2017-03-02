@@ -86,8 +86,8 @@
 <b>6. Restart aws</b> </br>
 
 <b>7. Install VNC</b> </br>
-   chrome app store
-   VNC Viewer for Google Chrome
+   Go to  chrome app store<br>
+   Find VNC Viewer for Google Chrome<br>
    <img src="https://github.com/TensorMSA/hoyai_docker/blob/master/img/VNC_CHORME_2.JPG" width="750"/>
    
    <b>1.Install Xming </b> </br>
