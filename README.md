@@ -71,10 +71,7 @@
      [Install]
      WantedBy=default.target
    ``` 
-   - In VI - E212: Can't open file for writing</br>
-   ```
-      :w !sudo tee % > /dev/null
-   ``` 
+
    - Service enable & start</br>
    ```bash
       sudo systemctl enable docker_hoyai.service
