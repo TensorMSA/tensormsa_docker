@@ -238,9 +238,17 @@ RUN apt-get update && apt-get install -y rabbitmq-server && rm -rf /var/lib/apt/
 EXPOSE 5672
 
 #############################################################################
-# raabbitmq-server                                                 #
+# hdfview                                                 #
 #############################################################################
 RUN apt-get update && apt-get install -y hdfview && rm -rf /var/lib/apt/
+
+#############################################################################
+# node.js npm                                             #
+#############################################################################
+RUN apt-get update && apt-get install -y curl 
+RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+RUN apt-get update && apt-get install -y nodejs && rm -rf /var/lib/apt/
+
 
 
 #ENV HOSTNAME hostname
