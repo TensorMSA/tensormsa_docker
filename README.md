@@ -30,14 +30,15 @@
    
 <b>1.Prerequisite </b> </br>
    - Docker 1.13 on ubuntu 16.04</br>
-   * How to install : https://docs.docker.com/engine/installation/linux/ubuntu/ </br>    
+   - How to install : https://docs.docker.com/engine/installation/linux/ubuntu/ <br>
+   - Add 127.0.0.1 ip-xxx-xx-x-xx to /etc/hosts<br>
    
 <b>2.User add ubuntu </b> </br>
    ```bash
      sudo groupadd docker
      sudo gpasswd -a ubuntu docker
    ```
-   * Test command : docker ps(By ubuntu id)
+   * Test command : docker ps(By ubuntu id) - restart AWS 
 
 <b>3.Download Docker Images </b> </br>
    ```bash
@@ -70,6 +71,10 @@
      [Install]
      WantedBy=default.target
    ``` 
+   - In VI - E212: Can't open file for writing</br>
+   ```
+      :w !sudo tee % > /dev/null
+   ``` 
    - Service enable & start</br>
    ```bash
       sudo systemctl enable docker_hoyai.service
@@ -86,9 +91,9 @@
 <b>6. Restart aws</b> </br>
 
 <b>7. Install VNC</b> </br>
-   chrome app store
-   VNC Viewer for Google Chrome
-   <img src="https://raw.githubusercontent.com/seungwookim/TensorMSA/master/ProjectDesc3.png" width="750"/>
+   Go to  chrome app store<br>
+   Find VNC Viewer for Google Chrome<br>
+   <img src="https://github.com/TensorMSA/hoyai_docker/blob/master/img/VNC_CHORME_2.JPG" width="750"/>
    
    <b>1.Install Xming </b> </br>
    - download Xming : https://sourceforge.net/projects/xming/ </br>
