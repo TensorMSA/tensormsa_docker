@@ -86,27 +86,27 @@
    ```
 
 <b>6. Restart aws</b> </br>
-   Check for hoyai_dev_docker started after aws reboot<br>
+   - Check for hoyai_dev_docker started after aws reboot<br>
   ```bash
      docker ps 
   ```  
 
 <b>7. Install VNC</b> </br>
-   Go to  chrome app store<br>
-   Find VNC Viewer for Google Chrome<br>
+   - Go to  chrome app store<br>
+   - Find VNC Viewer for Google Chrome<br>
    <img src="https://github.com/TensorMSA/hoyai_docker/blob/master/img/VNC_CHORME_2.JPG" width="750"/>
 
 <b>7. Connect VNC</b> </br>
-   Make New tab in chrome<br>
-   Find apps icon on top of screen<br>
-   Click vnc and input your ip(port : 5901) <br>
-   <b>Passwd : vncpasswd</b><br>
-   
+   - Make New tab in chrome<br>
+   - Find apps icon on top of screen<br>
+   - Click vnc and input your ip(port : 5901) <br>
+   <b>- Passwd : vncpasswd</b><br>
+   <img src="https://github.com/TensorMSA/hoyai_docker/blob/master/img/VNC_CHORME_2.JPG" width="750"/>
 <b>8. ETC</b> </br>
-   pycharm.sh &<br>
-   google-chrome<br>
-   firefox<br>
-   pgadmin3<br>
+   - pycharm.sh &<br>
+   - google-chrome<br>
+   - firefox<br>
+   - pgadmin3<br>
 
 
 
