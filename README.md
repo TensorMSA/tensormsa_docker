@@ -102,7 +102,7 @@
    - Find apps icon on top of screen<br>
    - Click vnc and input your ip(port : 5901) <br>
    <b>- Passwd : vncpasswd</b><br>
-   <img src="https://github.com/TensorMSA/hoyai_docker/blob/master/img/VNC_CHORME_2.JPG" width="750"/>
+   <img src="https://github.com/TensorMSA/hoyai_docker/blob/master/img/NEW_TAB_3.JPG" width="750"/>
 <b>8. ETC</b> </br>
    - pycharm.sh &<br>
    - google-chrome<br>
