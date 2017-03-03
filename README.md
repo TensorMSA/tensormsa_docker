@@ -93,6 +93,7 @@
 <b>7. Install VNC</b> </br>
    Go to  chrome app store<br>
    Find VNC Viewer for Google Chrome<br>
+   You can connect your IP:5901 and passwd is vncpasswd (Change your passwd)
    <img src="https://github.com/TensorMSA/hoyai_docker/blob/master/img/VNC_CHORME_2.JPG" width="750"/>
    
    <b>1.Install Xming </b> </br>
