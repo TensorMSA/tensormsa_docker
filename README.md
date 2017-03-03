@@ -71,10 +71,7 @@
      [Install]
      WantedBy=default.target
    ``` 
-   - In VI - E212: Can't open file for writing</br>
-   ```
-      :w !sudo tee % > /dev/null
-   ``` 
+
    - Service enable & start</br>
    ```bash
       sudo systemctl enable docker_hoyai.service
@@ -87,16 +84,34 @@
       
       sudo systemctl stop docker_hoyai.service
    ```
- 
+
 <b>6. Restart aws</b> </br>
+   - Check for hoyai_dev_docker started after aws reboot<br>
+  ```bash
+     docker ps 
+  ```  
 
 <b>7. Install VNC</b> </br>
-   Go to  chrome app store<br>
-   Find VNC Viewer for Google Chrome<br>
-   You can connect your IP:5901 and passwd is vncpasswd (Change your passwd)
+   - Go to  chrome app store<br>
+   - Find VNC Viewer for Google Chrome<br>
    <img src="https://github.com/TensorMSA/hoyai_docker/blob/master/img/VNC_CHORME_2.JPG" width="750"/>
-   
-   <b>1.Install Xming </b> </br>
+
+<b>7. Connect VNC</b> </br>
+   - Make New tab in chrome<br>
+   - Find apps icon on top of screen<br>
+   - Click vnc and input your ip(port : 5901) <br>
+   <b>- Passwd : vncpasswd</b><br>
+   <img src="https://github.com/TensorMSA/hoyai_docker/blob/master/img/VNC_CHORME_2.JPG" width="750"/>
+<b>8. ETC</b> </br>
+   - pycharm.sh &<br>
+   - google-chrome<br>
+   - firefox<br>
+   - pgadmin3<br>
+
+
+
+---------------------------before--------------------------------------------------------<br>
+<b>1.Install Xming </b> </br>
    - download Xming : https://sourceforge.net/projects/xming/ </br>
    - install 
 
