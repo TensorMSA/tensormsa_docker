@@ -108,6 +108,24 @@
    - firefox<br>
    - pgadmin3<br>
 
+<b>9. Merge Another Repository to My Repository</b> </br>
+   - Make git repository for docker auto build
+   - Add remode repository
+   ```bash
+   git remote add hoyai_docker https://github.com/TensorMSA/hoyai_docker.git
+   ```
+   ```bash
+   cd hoyai_dev_docker/
+   
+   git pull hoyai_docker
+
+   git branch -d dd
+   git checkout -b dd hoyai_docker/master
+
+   git checkout master
+   git merge dd
+   git push
+   ```
 
 
 ---------------------------before--------------------------------------------------------<br>
