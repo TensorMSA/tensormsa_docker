@@ -220,15 +220,10 @@ ENV VNC_PW vncpassword
 RUN apt-get update && apt-get upgrade -y && apt-get install -y supervisor vim xfce4 vnc4server wget && rm -rf /var/lib/apt/
 EXPOSE 5901
 
-
 ADD .vnc /root/.vnc
 ADD scripts /root/scripts
 RUN chmod +x /root/.vnc/xstartup /etc/X11/xinit/xinitrc /root/scripts/*.sh 
-
-COPY runtime/ ${PG_APP_HOME}/
-COPY entrypoint.sh /sbin/entrypoint.sh
-RUN chmod 755 /sbin/entrypoint.sh
-
+RUN /root/scripts/bash_auto_completion.sh 
 
 #############################################################################
 # raabbitmq-server                                                 #
@@ -250,6 +245,9 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 RUN apt-get update && apt-get install -y nodejs && rm -rf /var/lib/apt/
 
 
+COPY runtime/ ${PG_APP_HOME}/
+COPY entrypoint.sh /sbin/entrypoint.sh
+RUN chmod 755 /sbin/entrypoint.sh
 
 #ENV HOSTNAME hostname
 

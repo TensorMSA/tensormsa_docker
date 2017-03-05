@@ -35,10 +35,6 @@ if [[ -z ${1} ]]; then
 else
   exec "$@"
 fi
-#echo "Starting ssh demon"
-#service ssh start 
-
-#very important starting bash shell
 
 #resolve_vnc_connection
 VNC_IP=$(ip addr show eth0 | grep -Po 'inet \K[\d.]+')
