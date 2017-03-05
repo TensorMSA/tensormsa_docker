@@ -47,6 +47,7 @@
 <b>4.Run Docker Container </b> </br>
    - Changes Resolution for vnc = VNC_RESOLUTION=<b>"1920x1080"</b> </br>
    ```bash
+   
      docker run -itd --env="VNC_RESOLUTION=1920x1080" --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --name hoyai_dev -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 8888:8888 -p 5901:5901 hoyai/hoyai_dev_docker
    ```
 
@@ -101,13 +102,32 @@
    - Find apps icon on top of screen<br>
    - Click vnc and input your ip(port : 5901) <br>
    <b>- Passwd : vncpasswd</b><br>
-   <img src="https://github.com/TensorMSA/hoyai_docker/blob/master/img/VNC_CHORME_2.JPG" width="750"/>
+   <img src="https://github.com/TensorMSA/hoyai_docker/blob/master/img/NEW_TAB_3.JPG" width="750"/><br>
+   
 <b>8. ETC</b> </br>
    - pycharm.sh &<br>
    - google-chrome<br>
    - firefox<br>
    - pgadmin3<br>
 
+<b>9. Merge Another Repository to My Repository</b> </br>
+   - Make git repository for docker auto build
+   - Add remode repository
+   ```bash
+   git remote add hoyai_docker https://github.com/TensorMSA/hoyai_docker.git
+   ```
+   ```bash
+   cd hoyai_dev_docker/
+   
+   git pull hoyai_docker
+
+   git branch -d dd
+   git checkout -b dd hoyai_docker/master
+
+   git checkout master
+   git merge dd
+   git push
+   ```
 
 
 ---------------------------before--------------------------------------------------------<br>
