@@ -69,6 +69,10 @@ case $i in
     ;;
 esac
 done
+
+echo -e "\n------------------ bash auto completion ------------------"
+#/root/scripts/bash_auto_completion.sh
+
 echo -e "\n------------------ rabbitmq server started ------------------"
 service rabbitmq-server start
 #echo -e "\n------------------ rabbitmq add user       ------------------"

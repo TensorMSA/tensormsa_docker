@@ -221,9 +221,10 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y supervisor vim xf
 EXPOSE 5901
 
 ADD .vnc /root/.vnc
+ADD .config /root/.config
 ADD scripts /root/scripts
 RUN chmod +x /root/.vnc/xstartup /etc/X11/xinit/xinitrc /root/scripts/*.sh 
-RUN /root/scripts/bash_auto_completion.sh 
+#RUN /root/scripts/bash_auto_completion.sh 
 
 #############################################################################
 # raabbitmq-server                                                 #
@@ -233,9 +234,9 @@ RUN apt-get update && apt-get install -y rabbitmq-server && rm -rf /var/lib/apt/
 EXPOSE 5672
 
 #############################################################################
-# hdfview                                                 #
+# hdfview    gnome-terminal                                             #
 #############################################################################
-RUN apt-get update && apt-get install -y hdfview && rm -rf /var/lib/apt/
+RUN apt-get update && apt-get install -y hdfview gnome-terminal && rm -rf /var/lib/apt/
 
 #############################################################################
 # node.js npm                                             #
