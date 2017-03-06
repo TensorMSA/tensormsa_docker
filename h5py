@@ -1,0 +1,20 @@
+# CSV > H5PY 로 만들기
+import h5py
+import numpy as np
+
+my_data = np.genfromtxt("/home/dev/hoyai/Titanic.csv", delimiter=",", dtype=None, names=True)
+
+myFile = "/home/dev/hoyai/Titanic.hdf"
+# with h5py.File(myFile, "a") as write:
+#     dset = write.create_dataset("Dset1", data=my_data, compression="gzip", compression_opts=9)
+
+###################################################################################
+with h5py.File(myFile, "r") as read:
+    print(read["Dset1"])
+    print(read.attrs.keys())
+
+    rFile = read['Dset1'][:]
+
+    for i in rFile:
+        for j in i:
+            print(str(j))
