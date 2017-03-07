@@ -105,9 +105,9 @@ RUN apt-get update && apt-get install -y git vim && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt /home/docker/code/requirements.txt
+#COPY requirements.txt /home/docker/code/requirements.txt
 WORKDIR /home/docker/code
-RUN pip install -r /home/docker/code/requirements.txt
+#RUN pip install -r /home/docker/code/requirements.txt
 
 EXPOSE 8000/tcp
 
@@ -245,12 +245,27 @@ RUN apt-get update && apt-get install -y curl
 RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 RUN apt-get update && apt-get install -y nodejs && rm -rf /var/lib/apt/
 
+#############################################################################
+# nlp setting                                                               #
+#############################################################################
+RUN apt-get update && apt-get install -y openjdk-8-jdk && rm -rf /var/lib/apt/
+
+RUN conda install -y -c  conda-forge jpype1
+
+#############################################################################
+# pip & entrypoint setting                                #
+#############################################################################
+
+COPY requirements.txt /home/docker/code/requirements.txt
+WORKDIR /home/docker/code
+RUN pip install -r /home/docker/code/requirements.txt
 
 COPY runtime/ ${PG_APP_HOME}/
 COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh
 
 #ENV HOSTNAME hostname
+
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 

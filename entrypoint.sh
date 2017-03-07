@@ -79,11 +79,11 @@ service rabbitmq-server start
 if [[ -z $(rabbitmqctl list_users | grep tensormsa) ]]; then
   echo "rabbitmq Tensormsa add user" 
   rabbitmqctl add_user tensormsa tensormsa
+  echo "rabbitmq Tensormsa set user"
+  rabbitmqctl set_user_tags tensormsa administrator
+  echo "rabbitmq Tensormsa set user"
+  rabbitmqctl set_permissions -p / tensormsa '.*' '.*' '.*'
 fi
 
-if [[ -z $(rabbitmqctl list_users | grep tensormsa) ]]; then
-  echo "rabbitmq Tensormsa set user "
-  rabbitmqctl set_user_tags tensormsa administrator
-fi
 
 /bin/bash

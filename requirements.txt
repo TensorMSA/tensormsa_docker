@@ -6,3 +6,6 @@ django-rest-swagger==2.1.1
 djangorestframework==3.5.3
 celery==4.0.2
 django-celery==3.2.1
+nltk==3.2.1
+konlpy==0.4.4
+gensim==1.0.1
