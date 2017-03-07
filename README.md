@@ -27,7 +27,7 @@
    - Docker 1.13 on ubuntu 16.04</br>
    - How to install : https://docs.docker.com/engine/installation/linux/ubuntu/ <br>
    - Add 127.0.0.1 ip-xxx-xx-x-xx to /etc/hosts<br>
-   - UNSET DISPLAY
+   - unset DISPLAY
    
 <b>2.User add ubuntu </b> </br>
    ```bash
