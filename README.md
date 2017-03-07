@@ -22,16 +22,12 @@
  - hdfview
  - vnc xfce4 setup</br>
  
-    ```bash
-   apt-get install aptitude
-   aptitude install pgadmin3
-   apt-get install pgadmin3=1.22.0-1 pgadmin3-data=1.22.0-1
-   ```
    
 <b>1.Prerequisite </b> </br>
    - Docker 1.13 on ubuntu 16.04</br>
    - How to install : https://docs.docker.com/engine/installation/linux/ubuntu/ <br>
    - Add 127.0.0.1 ip-xxx-xx-x-xx to /etc/hosts<br>
+   - UNSET DISPLAY
    
 <b>2.User add ubuntu </b> </br>
    ```bash
@@ -89,6 +85,7 @@
 <b>6. Restart aws</b> </br>
    - Check for hoyai_dev_docker started after aws reboot<br>
   ```bash
+     
      docker ps 
   ```  
 
