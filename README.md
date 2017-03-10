@@ -1,5 +1,7 @@
 # TensorMSA : Tensorflow Micro Service Architecture
 
+# Install
+  conda install -y MKL
 
 # Install
 
