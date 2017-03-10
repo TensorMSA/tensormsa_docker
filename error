@@ -1,0 +1,4 @@
+Intel MKL FATAL ERROR: Cannot load libmkl_avx.so or libmkl_def.so 
+
+solve
+conda install mkl
