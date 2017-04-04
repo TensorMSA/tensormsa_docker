@@ -9,3 +9,4 @@ django-celery==3.2.1
 nltk==3.2.1
 konlpy==0.4.4
 gensim==1.0.1
+keras==2.0.2

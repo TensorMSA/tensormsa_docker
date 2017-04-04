@@ -250,8 +250,9 @@ RUN apt-get update && apt-get install -y nodejs && rm -rf /var/lib/apt/
 #############################################################################
 RUN apt-get update && apt-get install -y openjdk-8-jdk && rm -rf /var/lib/apt/
 
-RUN conda install -y -c  conda-forge jpype1
 
+RUN conda install -y -c  conda-forge jpype1
+RUN conda install -y  mkl
 #############################################################################
 # pip & entrypoint setting                                #
 #############################################################################
