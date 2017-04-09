@@ -43,14 +43,14 @@ ENV PATH /opt/conda/bin:$PATH
 RUN pip install --upgrade pip
 
 
-
+ 
 ##############################################################################
 # tensorflow
 ##############################################################################
-ENV TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.0.0-cp35-cp35m-linux_x86_64.whl
+#ENV TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.0.0-cp35-cp35m-linux_x86_64.whl
 #ENV TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.12.1-cp35-cp35m-linux_x86_64.whl
-RUN pip install --upgrade -I setuptools
-RUN pip install --upgrade $TF_BINARY_URL
+#RUN pip install --upgrade -I setuptools
+#RUN pip install --upgrade $TF_BINARY_URL
 
 
 ##############################################################################
@@ -217,7 +217,9 @@ ENV VNC_COL_DEPTH 24
 ENV VNC_RESOLUTION 1280x1024
 ENV VNC_PW vncpassword
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y supervisor vim xfce4 vnc4server wget && rm -rf /var/lib/apt/
+RUN apt-get update && apt-get upgrade -y && apt-get install -y supervisor vim vnc4server wget ubuntu-desktop gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal && rm -rf /var/lib/apt/
+
+
 EXPOSE 5901
 
 ADD .vnc /root/.vnc
@@ -236,7 +238,7 @@ EXPOSE 5672
 #############################################################################
 # hdfview    gnome-terminal                                             #
 #############################################################################
-RUN apt-get update && apt-get install -y hdfview gnome-terminal && rm -rf /var/lib/apt/
+RUN apt-get update && apt-get install -y hdfview && rm -rf /var/lib/apt/
 
 #############################################################################
 # node.js npm                                             #
@@ -253,6 +255,120 @@ RUN apt-get update && apt-get install -y openjdk-8-jdk && rm -rf /var/lib/apt/
 
 RUN conda install -y -c  conda-forge jpype1
 RUN conda install -y  mkl
+
+RUN mkdir /home/dev/mecab
+RUN cd /home/dev/mecab
+WORKDIR /home/dev/mecab
+
+RUN curl -O https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh
+RUN chmod +x mecab.sh
+RUN ./mecab.sh
+
+RUN conda install -y libgcc
+
+RUN wget https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.0.1-20150920.tar.gz \
+&& tar xzvf mecab-ko-dic-2.0.1-20150920.tar.gz \
+&& cd mecab-ko-dic-2.0.1-20150920 \
+&& sudo ldconfig \
+&& ldconfig -p | grep /usr/local/lib \
+&& ./clean \
+&& ./configure \
+make install
+
+ 
+##############################################################################
+# tensorflow
+##############################################################################
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        curl \
+        git \
+        libcurl3-dev \
+        libfreetype6-dev \
+        libpng12-dev \
+        libzmq3-dev \
+        pkg-config \
+        python-dev \
+        rsync \
+        software-properties-common \
+        unzip \
+        zip \
+        zlib1g-dev \
+        && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set up Bazel.
+
+# We need to add a custom PPA to pick up JDK8, since trusty doesn't
+# have an openjdk8 backport.  openjdk-r is maintained by a reliable contributor:
+# Matthias Klose (https://launchpad.net/~doko).  It will do until
+# we either update the base image beyond 14.04 or openjdk-8 is
+# finally backported to trusty; see e.g.
+#   https://bugs.launchpad.net/trusty-backports/+bug/1368094
+RUN add-apt-repository -y ppa:openjdk-r/ppa && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends openjdk-8-jdk openjdk-8-jre-headless && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+
+# Running bazel inside a `docker build` command causes trouble, cf:
+#   https://github.com/bazelbuild/bazel/issues/134
+# The easiest solution is to set up a bazelrc file forcing --batch.
+RUN echo "startup --batch" >>/etc/bazel.bazelrc
+# Similarly, we need to workaround sandboxing issues:
+#   https://github.com/bazelbuild/bazel/issues/418
+RUN echo "build --spawn_strategy=standalone --genrule_strategy=standalone" \
+    >>/etc/bazel.bazelrc
+# Install the most recent bazel release.
+ENV BAZEL_VERSION 0.4.5
+WORKDIR /
+RUN mkdir /bazel && \
+    cd /bazel && \
+    curl -fSsL -O https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
+    curl -fSsL -o /bazel/LICENSE.txt https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE.txt && \
+    chmod +x bazel-*.sh && \
+    ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
+    cd / && \
+    rm -f /bazel/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+
+# Download and build TensorFlow.
+RUN cd /home/dev/
+WORKDIR /home/dev
+RUN git clone https://github.com/tensorflow/tensorflow.git && \
+    cd tensorflow && \
+    git checkout r1.1
+WORKDIR /home/dev/tensorflow
+
+# TODO(craigcitro): Don't install the pip package, since it makes it
+# more difficult to experiment with local changes. Instead, just add
+# the built directory to the path.
+
+ENV CI_BUILD_PYTHON python
+
+RUN tensorflow/tools/ci_build/builds/configured CPU \
+    bazel build -c opt tensorflow/tools/pip_package:build_pip_package 
+
+RUN bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip 
+
+
+
+#RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
+#    python get-pip.py && \
+#    rm get-pip.py
+
+RUN pip install /tmp/pip/tensorflow-*.whl 
+RUN rm -rf /tmp/pip && \
+    rm -rf /root/.cache
+
+# Clean up pip wheel and Bazel cache when done.
+
+# TensorBoard
+EXPOSE 6006
+
+
 #############################################################################
 # pip & entrypoint setting                                #
 #############################################################################
