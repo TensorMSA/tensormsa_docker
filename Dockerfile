@@ -20,17 +20,15 @@ RUN apt-get update && \
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install wget and build-essential
-RUN apt-get update && apt-get install -y \
-  build-essential \
-  wget \
-  linux-generic 
-
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential wget  linux-generic && \
+  rm -rf /var/lib/apt/lists/*
+  
 
 ##############################################################################
 # anaconda python
 ##############################################################################
 RUN apt-get update && \
-    apt-get install -y wget bzip2 ca-certificates libmysqlclient-dev && \
+    apt-get install -y --no-install-recommends bzip2 ca-certificates libmysqlclient-dev && \
     rm -rf /var/lib/apt/lists/* 
 
 RUN wget --quiet https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh && \
@@ -57,7 +55,7 @@ RUN pip install --upgrade pip
 # posgresql 9.6
 ##############################################################################
 
-RUN apt-get update && apt-get install -y sudo && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends sudo && rm -rf /var/lib/apt/lists/*
 
 
 
@@ -97,13 +95,13 @@ WORKDIR ${PG_HOME}
 # GIT, VI                                                                   #
 #############################################################################
 
-RUN apt-get update && apt-get install -y git vim && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends git vim && rm -rf /var/lib/apt/lists/*
 
 #############################################################################
 # django                                                                   #
 #############################################################################
 
-RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends nginx && rm -rf /var/lib/apt/lists/*
 
 #COPY requirements.txt /home/docker/code/requirements.txt
 WORKDIR /home/docker/code
@@ -116,7 +114,7 @@ EXPOSE 8000/tcp
 #############################################################################
 
 
-RUN apt-get update && apt-get install -y  openssh-server && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-server && rm -rf /var/lib/apt/lists/*
 
 RUN sed -ri 's/^Port\s+.*/Port 2266/' /etc/ssh/sshd_config
 RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
@@ -129,7 +127,7 @@ RUN echo 'root:screencast' | chpasswd
 #############################################################################
 # x11                                                                       #
 #############################################################################
-RUN apt-get update && apt-get install -y  xauth && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends xauth && rm -rf /var/lib/apt/lists/*
 
 
 #############################################################################
@@ -149,7 +147,7 @@ RUN ln -s /home/dev/pyc/bin/pycharm.sh /usr/bin/pycharm
 #############################################################################
 # firefox                                                                   #
 #############################################################################
-RUN apt-get update && apt-get install -y libglu1 firefox && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends libglu1 firefox && rm -rf /var/lib/apt/lists/*
 
 
 #############################################################################
@@ -177,7 +175,7 @@ RUN echo "export PATH=${PYTHON_HOME}/bin:$PATH" >> ~/.bashrc
 #RUN apt-get install -f -y
 #RUN dpkg -i ./google-chrome*.deb;
 RUN apt-get update \
-    && apt-get install -y chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg \
+    && apt-get install -y --no-install-recommends chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg \
     && rm -rf /var/lib/apt/ \
     && ln -s /usr/bin/chromium-browser /usr/bin/google-chrome \
     # fix to start chromium in a Docker container
@@ -187,20 +185,20 @@ RUN apt-get update \
 #############################################################################
 # naver nanum font                                                          #
 #############################################################################
-RUN apt-get update && apt-get install -y fonts-nanum && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends fonts-nanum && rm -rf /var/lib/apt/lists/*
 
 #############################################################################
 # pgadmin3                                                          #
 #############################################################################
-RUN apt-get update && apt-get install -y aptitude
+RUN apt-get update && apt-get install -y --no-install-recommends aptitude
 RUN aptitude install -y pgadmin3
-RUN apt-get install -y pgadmin3=1.22.0-1 pgadmin3-data=1.22.0-1&& rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y --no-install-recommends pgadmin3=1.22.0-1 pgadmin3-data=1.22.0-1&& rm -rf /var/lib/apt/lists/*
 
 #############################################################################
 # korean pack                                                       #
 #############################################################################
-RUN apt-get update && apt-get install -y language-pack-ko
-RUN apt-get install -y language-pack-ko-base&& rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends language-pack-ko
+RUN apt-get install -y --no-install-recommends language-pack-ko-base&& rm -rf /var/lib/apt/lists/*
 
 RUN echo "LANG=\"ko_KR.UTF-8\"" >> ~/.bashrc
 
@@ -217,7 +215,7 @@ ENV VNC_COL_DEPTH 24
 ENV VNC_RESOLUTION 1280x1024
 ENV VNC_PW vncpassword
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y supervisor vim vnc4server wget ubuntu-desktop gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal && rm -rf /var/lib/apt/
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends supervisor vim vnc4server ubuntu-desktop gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal && rm -rf /var/lib/apt/
 
 
 EXPOSE 5901
@@ -232,25 +230,25 @@ RUN chmod +x /root/.vnc/xstartup /etc/X11/xinit/xinitrc /root/scripts/*.sh
 # raabbitmq-server                                                 #
 #############################################################################
 
-RUN apt-get update && apt-get install -y rabbitmq-server && rm -rf /var/lib/apt/
+RUN apt-get update && apt-get install -y --no-install-recommends rabbitmq-server && rm -rf /var/lib/apt/
 EXPOSE 5672
 
 #############################################################################
 # hdfview    gnome-terminal                                             #
 #############################################################################
-RUN apt-get update && apt-get install -y hdfview && rm -rf /var/lib/apt/
+RUN apt-get update && apt-get install -y --no-install-recommends hdfview && rm -rf /var/lib/apt/lists/*
 
 #############################################################################
 # node.js npm                                             #
 #############################################################################
-RUN apt-get update && apt-get install -y curl 
+RUN apt-get update && apt-get install -y --no-install-recommends curl 
 RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-RUN apt-get update && apt-get install -y nodejs && rm -rf /var/lib/apt/
+RUN apt-get update && apt-get install -y --no-install-recommends nodejs && rm -rf /var/lib/apt/lists/*
 
 #############################################################################
 # nlp setting                                                               #
 #############################################################################
-RUN apt-get update && apt-get install -y openjdk-8-jdk && rm -rf /var/lib/apt/
+RUN apt-get update && apt-get install -y --no-install-recommends openjdk-8-jdk && rm -rf /var/lib/apt/lists/*
 
 
 RUN conda install -y -c  conda-forge jpype1
