@@ -143,7 +143,7 @@ RUN wget https://download.jetbrains.com/python/pycharm-community-2016.3.2.tar.gz
 RUN tar -xvf pycharm-community-2016.3.2.tar.gz
 RUN mv pycharm-community-2016.3.2 pyc
 RUN ln -s /home/dev/pyc/bin/pycharm.sh /usr/bin/pycharm
-
+RUN rm -f pycharm-community-2016.3.2.tar.gz
 #############################################################################
 # firefox                                                                   #
 #############################################################################
@@ -215,7 +215,7 @@ ENV VNC_COL_DEPTH 24
 ENV VNC_RESOLUTION 1280x1024
 ENV VNC_PW vncpassword
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends supervisor vim vnc4server ubuntu-desktop gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal && rm -rf /var/lib/apt/
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends supervisor vim vnc4server xfce4 ubuntu-desktop gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal && rm -rf /var/lib/apt/
 
 
 EXPOSE 5901
@@ -233,7 +233,8 @@ RUN chmod +x /root/.vnc/xstartup /etc/X11/xinit/xinitrc /root/scripts/*.sh
 RUN apt-get update && apt-get install -y --no-install-recommends rabbitmq-server && rm -rf /var/lib/apt/
 EXPOSE 5672
 
-#############################################################################
+###########UN apt-get update && apt-get install -y --no-install-recommends nodejs && rm -rf /var/lib/apt/lists/*
+
 # hdfview    gnome-terminal                                             #
 #############################################################################
 RUN apt-get update && apt-get install -y --no-install-recommends hdfview && rm -rf /var/lib/apt/lists/*
@@ -273,6 +274,9 @@ RUN wget https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.0.1
 && ./configure \
 make install
 
+RUN rm -f  mecab-ko-dic-2.0.1-20150920.tar.gz
+RUN rm -f /tmp/mecab-*.tar.gz
+RUN rm -Rf /tmp/mecab*-20150920
  
 ##############################################################################
 # tensorflow
@@ -365,6 +369,11 @@ RUN rm -rf /tmp/pip && \
 
 # TensorBoard
 EXPOSE 6006
+#############################################################################
+# Memcached                                #
+#############################################################################
+
+RUN apt-get update && apt-get install -y --no-install-recommends memcached && rm -rf /var/lib/apt/lists/*
 
 
 #############################################################################
