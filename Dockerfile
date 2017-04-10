@@ -246,38 +246,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl
 RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 RUN apt-get update && apt-get install -y --no-install-recommends nodejs && rm -rf /var/lib/apt/lists/*
 
-#############################################################################
-# nlp setting                                                               #
-#############################################################################
-RUN apt-get update && apt-get install -y --no-install-recommends openjdk-8-jdk && rm -rf /var/lib/apt/lists/*
-
-
-RUN conda install -y -c  conda-forge jpype1
-RUN conda install -y  mkl
-
-RUN mkdir /home/dev/mecab
-RUN cd /home/dev/mecab
-WORKDIR /home/dev/mecab
-
-RUN curl -O https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh
-RUN chmod +x mecab.sh
-RUN ./mecab.sh
-
-RUN conda install -y libgcc
-
-RUN wget https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.0.1-20150920.tar.gz \
-&& tar xzvf mecab-ko-dic-2.0.1-20150920.tar.gz \
-&& cd mecab-ko-dic-2.0.1-20150920 \
-&& sudo ldconfig \
-&& ldconfig -p | grep /usr/local/lib \
-&& ./clean \
-&& ./configure \
-make install
-
-RUN rm -f  mecab-ko-dic-2.0.1-20150920.tar.gz
-RUN rm -f /tmp/mecab-*.tar.gz
-RUN rm -Rf /tmp/mecab*-20150920
- 
 ##############################################################################
 # tensorflow
 ##############################################################################
@@ -375,14 +343,55 @@ EXPOSE 6006
 
 RUN apt-get update && apt-get install -y --no-install-recommends memcached && rm -rf /var/lib/apt/lists/*
 
+#############################################################################
+# nlp setting                                                               #
+#############################################################################
+RUN apt-get update && apt-get install -y --no-install-recommends openjdk-8-jdk && rm -rf /var/lib/apt/lists/*
+
+
+RUN conda install -y -c  conda-forge jpype1
+RUN conda install -y  mkl
+
+RUN mkdir /home/dev/mecab
+RUN cd /home/dev/mecab
+WORKDIR /home/dev/mecab
+
+RUN curl -O https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh
+RUN chmod +x mecab.sh
+RUN ./mecab.sh
+
+RUN conda install -y libgcc
+
+RUN wget https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.0.1-20150920.tar.gz \
+&& tar xzvf mecab-ko-dic-2.0.1-20150920.tar.gz \
+&& cd mecab-ko-dic-2.0.1-20150920 \
+&& sudo ldconfig \
+&& ldconfig -p | grep /usr/local/lib \
+&& ./clean \
+&& ./configure \
+&& make \
+&& make install
+
+RUN rm -f  mecab-ko-dic-2.0.1-20150920.tar.gz
+RUN rm -f /tmp/mecab-*.tar.gz
+RUN rm -Rf /tmp/mecab*-20150920
+ 
 
 #############################################################################
 # pip & entrypoint setting                                #
 #############################################################################
+RUN apt-get clean
 
 COPY requirements.txt /home/docker/code/requirements.txt
 WORKDIR /home/docker/code
 RUN pip install -r /home/docker/code/requirements.txt
+
+
+RUN rm -rf /tmp/pip && \
+    rm -rf /root/.cache
+
+
+
 
 COPY runtime/ ${PG_APP_HOME}/
 COPY entrypoint.sh /sbin/entrypoint.sh
