@@ -1,14 +1,13 @@
 # TensorMSA : Tensorflow Micro Service Architecture
 
-# Install
-  conda install -y MKL
 
 # Install
 
 <b>History</b> </br>
- - 16.2.3             Initial</br>
- - 16.2.4             Firefox Fix, Chrome Installed, Korean Font Installed</br>
- - 16.3.1             Tensorflow 1.0, RabbitMQ, Vnc Server, Xfce4 Installed  </br>
+ - 17.2.3             Initial</br>
+ - 17.2.4             Firefox Fix, Chrome Installed, Korean Font Installed</br>
+ - 17.3.1             Tensorflow 1.0, RabbitMQ, Vnc Server, Xfce4 Installed  </br>
+ - 17.4.11            Tensorflow 1.1(Complie), Neo4j, flower, mecab Installed   </br>
 
 <b>Summeries</b> </br>
  - python 3.5
@@ -22,14 +21,18 @@
  - pgadmin3
  - rabbit mq
  - hdfview
- - vnc xfce4 setup</br>
+ - vnc xfce4 setup
+ - Neo4j
+ - mecab</br>
  
    
 <b>1.Prerequisite </b> </br>
    - Docker 1.13 on ubuntu 16.04</br>
    - How to install : https://docs.docker.com/engine/installation/linux/ubuntu/ <br>
    - Add 127.0.0.1 ip-xxx-xx-x-xx to /etc/hosts<br>
+   ```bash
    - unset DISPLAY
+    ```
    
 <b>2.User add ubuntu </b> </br>
    ```bash
@@ -40,7 +43,7 @@
 
 <b>3.Download Docker Images </b> </br>
    ```bash
-     docker pull hoyai/hoyai_dev_docker
+     docker pull hoyai/hoyai_dev_docker:squashed
    ```
 <b>4.Run Docker Container </b> </br>
    - Changes Resolution for vnc = VNC_RESOLUTION=<b>"1920x1080"</b> </br>
@@ -105,7 +108,6 @@
    
 <b>8. ETC</b> </br>
    - pycharm.sh &<br>
-   - google-chrome<br>
    - firefox<br>
    - pgadmin3<br>
 
