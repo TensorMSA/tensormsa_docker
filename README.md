@@ -129,7 +129,11 @@
    git merge dd
    git push
    ```
-
+ <b>10. Squash Docker images</b> </br>
+ ```bash
+ pip install docker-squash
+ docker-squash -f f49eec89601e -t hoyai/hoyai_dev_docker:squashed hoyai/hoyai_dev_docker
+ ```
 
 ---------------------------before--------------------------------------------------------<br>
 <b>1.Install Xming </b> </br>
