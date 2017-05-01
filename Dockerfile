@@ -174,12 +174,12 @@ RUN echo "export PATH=${PYTHON_HOME}/bin:$PATH" >> ~/.bashrc
 #RUN apt-get update
 #RUN apt-get install -f -y
 #RUN dpkg -i ./google-chrome*.deb;
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg \
-    && rm -rf /var/lib/apt/ \
-    && ln -s /usr/bin/chromium-browser /usr/bin/google-chrome \
+#RUN apt-get update \
+#    && apt-get install -y --no-install-recommends chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg \
+#    && rm -rf /var/lib/apt/ \
+#    && ln -s /usr/bin/chromium-browser /usr/bin/google-chrome \
     # fix to start chromium in a Docker container
-    && echo "CHROMIUM_FLAGS='--no-sandbox --start-maximized --user-data-dir'" > ~/.chromium-browser.init
+#    && echo "CHROMIUM_FLAGS='--no-sandbox --start-maximized --user-data-dir'" > ~/.chromium-browser.init
 
 
 #############################################################################
@@ -215,7 +215,7 @@ ENV VNC_COL_DEPTH 24
 ENV VNC_RESOLUTION 1280x1024
 ENV VNC_PW vncpassword
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends supervisor vim vnc4server xfce4 ubuntu-desktop gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal && rm -rf /var/lib/apt/
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends supervisor vim vnc4server xfce4 ubuntu-desktop gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal && rm -rf /var/lib/apt/lists/*
 
 
 EXPOSE 5901
@@ -249,7 +249,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends nodejs && rm -r
 ##############################################################################
 # tensorflow
 ##############################################################################
-
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         curl \
@@ -334,7 +333,6 @@ RUN rm -rf /tmp/pip && \
     rm -rf /root/.cache
 
 # Clean up pip wheel and Bazel cache when done.
-
 # TensorBoard
 EXPOSE 6006
 #############################################################################
@@ -378,6 +376,19 @@ RUN rm -Rf /tmp/mecab*-20150920
  
 
 #############################################################################
+# neo4j                                                               #
+#############################################################################
+
+RUN cd /home/dev
+WORKDIR /home/dev
+
+RUN wget http://dist.neo4j.org/neo4j-community-3.1.3-unix.tar.gz
+RUN tar -xf neo4j-community-3.1.3-unix.tar.gz
+#RUN mv neo4j-community-3.1.2 neo4j
+RUN rm -f neo4j-community-3.1.3-unix.tar.gz 
+EXPOSE 7474 7678 5555
+
+############################################################################
 # pip & entrypoint setting                                #
 #############################################################################
 RUN apt-get clean
