@@ -29,7 +29,8 @@
 <b>1.Prerequisite </b> </br>
    - Docker 1.13 on ubuntu 16.04</br>
    - How to install : https://docs.docker.com/engine/installation/linux/ubuntu/ <br>
-   - Add 127.0.0.1 ip-xxx-xx-x-xx to /etc/hosts<br>
+   - Add 127.0.0.1 ip-xxx-xx-x-xx to /etc/hosts (ubuntu@ip-XX-XX-X-XXX in console)<br>
+   
    ```bash
    - unset DISPLAY
     ```
@@ -102,8 +103,8 @@
 <b>7. Connect VNC</b> </br>
    - Make New tab in chrome<br>
    - Find apps icon on top of screen<br>
-   - Click vnc and input your ip(port : 5901) <br>
-   <b>- Passwd : vncpasswd</b><br>
+   - Click vnc and input your ip(port : XXXX) <br>
+   <b>- Passwd : *********</b><br>
    <img src="https://github.com/TensorMSA/hoyai_docker/blob/master/img/NEW_TAB_3.JPG" width="750"/><br>
    
 <b>8. ETC</b> </br>
