@@ -136,6 +136,16 @@
  docker-squash -f f49eec89601e -t hoyai/hoyai_dev_docker:squashed hoyai/hoyai_dev_docker
  ```
 
+<b>11. Docker Container size up(1.7.1 RHEL)</b> </br>
+```bash
+service docker stop
+vi /etc/sysconfig/docker
+other_args="--storage-driver=devicemapper --storage-opt dm.basesize=20G"
+rm -Rf /var/lib/docker (다 지워짐 조심)
+service docker start or reboot
+이미지를 새로 받아야함
+```
+
 ---------------------------before--------------------------------------------------------<br>
 <b>1.Install Xming </b> </br>
    - download Xming : https://sourceforge.net/projects/xming/ </br>
