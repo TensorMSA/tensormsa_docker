@@ -133,6 +133,12 @@
  <b>10. Squash Docker images</b> </br>
  ```bash
  pip install docker-squash
+ 
+ docker history hoyai/hoyai_dev_docker:v2.0
+ select image id for starting point
+ docker-squash -f f49eec89601e -t hoyai/hoyai_dev_docker:squashed hoyai/hoyai_dev_docker:v2.0
+
+ 
  docker-squash -f f49eec89601e -t hoyai/hoyai_dev_docker:squashed hoyai/hoyai_dev_docker
  ```
 
