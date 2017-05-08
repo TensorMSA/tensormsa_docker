@@ -1,10 +1,12 @@
 # Trnsorflow r0.12
 # Ubuntu/Linux 64-bit Python 3.5
-
-FROM ubuntu:16.04
+FROM nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
 MAINTAINER yewoo <intwis100@naver.com>
 
 # locale for tokyo
+RUN apt-get update && apt-get install -y --no-install-recommends tzdata locales && \
+  rm -rf /var/lib/apt/lists/*
+  
 RUN cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -137,13 +139,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends xauth && rm -rf
 RUN mkdir /home/dev
 RUN cd /home/dev
 WORKDIR /home/dev
-RUN wget https://download.jetbrains.com/python/pycharm-community-2016.3.2.tar.gz
-
+RUN wget https://download.jetbrains.com/python/pycharm-community-2017.1.2.tar.gz 
  
-RUN tar -xvf pycharm-community-2016.3.2.tar.gz
-RUN mv pycharm-community-2016.3.2 pyc
+RUN tar -xvf pycharm-community-2017.1.2.tar.gz 
+RUN mv pycharm-community-2017.1.2.tar.gz pyc
 RUN ln -s /home/dev/pyc/bin/pycharm.sh /usr/bin/pycharm
-RUN rm -f pycharm-community-2016.3.2.tar.gz
+RUN rm -f pycharm-community-2017.1.2.tar.gz 
 #############################################################################
 # firefox                                                                   #
 #############################################################################
@@ -233,8 +234,7 @@ RUN chmod +x /root/.vnc/xstartup /etc/X11/xinit/xinitrc /root/scripts/*.sh
 RUN apt-get update && apt-get install -y --no-install-recommends rabbitmq-server && rm -rf /var/lib/apt/
 EXPOSE 5672
 
-###########UN apt-get update && apt-get install -y --no-install-recommends nodejs && rm -rf /var/lib/apt/lists/*
-
+##########################################################################
 # hdfview    gnome-terminal                                             #
 #############################################################################
 RUN apt-get update && apt-get install -y --no-install-recommends hdfview && rm -rf /var/lib/apt/lists/*
@@ -282,7 +282,6 @@ RUN add-apt-repository -y ppa:openjdk-r/ppa && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-
 # Running bazel inside a `docker build` command causes trouble, cf:
 #   https://github.com/bazelbuild/bazel/issues/134
 # The easiest solution is to set up a bazelrc file forcing --batch.
@@ -291,13 +290,15 @@ RUN echo "startup --batch" >>/etc/bazel.bazelrc
 #   https://github.com/bazelbuild/bazel/issues/418
 RUN echo "build --spawn_strategy=standalone --genrule_strategy=standalone" \
     >>/etc/bazel.bazelrc
+
 # Install the most recent bazel release.
+
 ENV BAZEL_VERSION 0.4.5
 WORKDIR /
 RUN mkdir /bazel && \
     cd /bazel && \
-    curl -fSsL -O https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
-    curl -fSsL -o /bazel/LICENSE.txt https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE.txt && \
+    curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36" -fSsL -O https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
+    curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36" -fSsL -o /bazel/LICENSE.txt https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE && \
     chmod +x bazel-*.sh && \
     ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
     cd / && \
@@ -315,10 +316,17 @@ WORKDIR /home/dev/tensorflow
 # more difficult to experiment with local changes. Instead, just add
 # the built directory to the path.
 
+# Configure the build for our CUDA configuration.
 ENV CI_BUILD_PYTHON python
+ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
+ENV TF_NEED_CUDA 1
+ENV TF_CUDA_COMPUTE_CAPABILITIES=3.0,3.5,5.2,6.0,6.1
 
-RUN tensorflow/tools/ci_build/builds/configured CPU \
-    bazel build -c opt tensorflow/tools/pip_package:build_pip_package 
+
+
+
+RUN tensorflow/tools/ci_build/builds/configured GPU \
+    bazel build -c opt --config=cuda tensorflow/tools/pip_package:build_pip_package 
 
 RUN bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip 
 
@@ -329,8 +337,8 @@ RUN bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip
 #    rm get-pip.py
 
 RUN pip install /tmp/pip/tensorflow-*.whl 
-RUN rm -rf /tmp/pip && \
-    rm -rf /root/.cache
+#RUN rm -rf /tmp/pip && \
+#    rm -rf /root/.cache
 
 # Clean up pip wheel and Bazel cache when done.
 # TensorBoard

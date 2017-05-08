@@ -137,13 +137,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends xauth && rm -rf
 RUN mkdir /home/dev
 RUN cd /home/dev
 WORKDIR /home/dev
-RUN wget https://download.jetbrains.com/python/pycharm-community-2016.3.2.tar.gz
 
- 
-RUN tar -xvf pycharm-community-2016.3.2.tar.gz
-RUN mv pycharm-community-2016.3.2 pyc
+ENV PYCHARM_URL https://download.jetbrains.com/python/pycharm-community-2016.3.2.tar.gz
+ENV PYCHARM_FILE pycharm-community-2016.3.2.tar.gz
+
+RUN wget $PYCAHRM_URL 
+RUN tar -xvf $PYCHARM_FILE 
+RUN mv $PYCHARM_FILE pyc
 RUN ln -s /home/dev/pyc/bin/pycharm.sh /usr/bin/pycharm
-RUN rm -f pycharm-community-2016.3.2.tar.gz
+RUN rm -f $PYCHARM_FILE 
 #############################################################################
 # firefox                                                                   #
 #############################################################################
