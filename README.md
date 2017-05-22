@@ -137,7 +137,7 @@
  <b>10. Squash Docker images</b> </br>
  ```bash
  
- docker history hoyai/hoyai_dev_docker:v2.1
+ docker build --rm -t hoyai/hoyai_dev_docker:v2.1 .
  
  pip install docker-squash
  
