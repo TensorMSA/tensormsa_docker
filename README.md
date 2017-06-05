@@ -55,8 +55,10 @@
      gpu
     nvidia-docker run -itd --env="VNC_RESOLUTION=1920x1080" --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --name hoyai_dev -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 8888:8888 -p 5901:5901 hoyai/hoyai_gpu_dev_docker:v1.0
     
-    posco 
-    docker run -itd --env="VNC_RESOLUTION=1920x1080" --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --volume="/home/hoya_src_root:/hoya_src_root" --volume="/home/hoya_model_root:/hoya_model_root" --volume="/home/hoya_str_root:/hoya_str_root" --name hoyai_dev_test -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 8888:8888 -p 5901:5901 hoyai/hoyai_dev_docker:v2.2
+    ai 137
+ docker run -itd --env="VNC_RESOLUTION=1920x1080" --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --volume="/data1/hoyai_playground:/home/dev/hoyai_playground"  --volume="/data1/hoya_src_root:/hoya_src_root" --volume="/data1/hoya_model_root:/hoya_model_root" --volume="/data1/hoya_str_root:/hoya_str_root" --name hoyai_dev_2 -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 8888:8888 -p 5901:5901 -p 5555:5555 hoyai/hoyai_dev_docker:flower
+
+
      
    ```
 
@@ -161,6 +163,20 @@ rm -Rf /var/lib/docker (다 지워짐 조심)
 service docker start or reboot
 이미지를 새로 받아야함
 ```
+
+b>12. Docker rebuild setup list</b> </br>
+```
+1. jenkins git pull
+2. jenkins jupyter git pull
+3. inside docker : passwd root
+4. inside docker : /home/dev 에서 ln -s로 hoya_src_root연결
+5. inside docker : /home/dev에서 jupyter notebook 실행
+6. inside docker : start_hoyai.sh 복사
+7. inside docker : ./start_hoyai.sh 6 8 10 으로 서버 스타트
+8. jupyter rule setup
+9. tensorboard --logdir=/hoya_model_root
+```
+
 
 ---------------------------before--------------------------------------------------------<br>
 <b>1.Install Xming </b> </br>
