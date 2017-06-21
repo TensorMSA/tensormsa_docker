@@ -134,20 +134,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends xauth && rm -rf
 # pycharm                                                                   #
 #############################################################################
 
+
 RUN mkdir /home/dev
 RUN cd /home/dev
 WORKDIR /home/dev
-RUN wget https://download.jetbrains.com/python/pycharm-community-2016.3.2.tar.gz
+RUN wget https://download.jetbrains.com/python/pycharm-community-2017.1.2.tar.gz
 
- 
-RUN tar -xvf pycharm-community-2016.3.2.tar.gz
-RUN mv pycharm-community-2016.3.2 pyc
+RUN tar -xvf pycharm-community-2017.1.2.tar.gz
+RUN mv pycharm-community-2017.1.2 pyc
 RUN ln -s /home/dev/pyc/bin/pycharm.sh /usr/bin/pycharm
-RUN rm -f pycharm-community-2016.3.2.tar.gz
+RUN rm -f pycharm-community-2017.1.2.tar.gz
+
 #############################################################################
 # firefox                                                                   #
 #############################################################################
-RUN apt-get update && apt-get install -y --no-install-recommends libglu1 firefox && rm -rf /var/lib/apt/lists/*
+#RUN apt-get update && apt-get install -y --no-install-recommends libglu1 firefox && rm -rf /var/lib/apt/lists/*
 
 
 #############################################################################
@@ -164,23 +165,12 @@ RUN echo "export PATH=${PYTHON_HOME}/bin:$PATH" >> ~/.bashrc
 #############################################################################
 # chrome                                                                    #
 #############################################################################
-#RUN mkdir /home/Download
-#RUN cd /home/Download
-#WORKDIR /home/Download
-#RUN apt-get update && apt-get install -y libgconf2-4 libnss3-1d libxss1 && rm -rf /var/lib/apt/lists/*
-#RUN apt-get install -f
-#RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-#RUN dpkg -i ./google-chrome*.deb; exit 0
-#RUN apt-get update
-#RUN apt-get install -f -y
-#RUN dpkg -i ./google-chrome*.deb;
-#RUN apt-get update \
-#    && apt-get install -y --no-install-recommends chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg \
-#    && rm -rf /var/lib/apt/ \
-#    && ln -s /usr/bin/chromium-browser /usr/bin/google-chrome \
+RUN apt-get update \
+    && apt-get install -y chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg \
+    && rm -rf /var/lib/apt/ \
+    && ln -s /usr/bin/chromium-browser /usr/bin/google-chrome \
     # fix to start chromium in a Docker container
-#    && echo "CHROMIUM_FLAGS='--no-sandbox --start-maximized --user-data-dir'" > ~/.chromium-browser.init
-
+    && echo "CHROMIUM_FLAGS='--no-sandbox --start-maximized --user-data-dir'" > ~/.chromium-browser.init
 
 #############################################################################
 # naver nanum font                                                          #
@@ -296,14 +286,13 @@ ENV BAZEL_VERSION 0.4.5
 WORKDIR /
 RUN mkdir /bazel && \
     cd /bazel && \
-    curl -fSsL -O https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
-    curl -fSsL -o /bazel/LICENSE.txt https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE.txt && \
+    curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36" -fSsL -O https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
+    curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36" -fSsL -o /bazel/LICENSE.txt https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE && \
     chmod +x bazel-*.sh && \
     ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
     cd / && \
     rm -f /bazel/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
 
-# Download and build TensorFlow.
 RUN cd /home/dev/
 WORKDIR /home/dev
 RUN git clone https://github.com/tensorflow/tensorflow.git && \
@@ -335,11 +324,6 @@ RUN rm -rf /tmp/pip && \
 # Clean up pip wheel and Bazel cache when done.
 # TensorBoard
 EXPOSE 6006
-#############################################################################
-# Memcached                                #
-#############################################################################
-
-RUN apt-get update && apt-get install -y --no-install-recommends memcached && rm -rf /var/lib/apt/lists/*
 
 #############################################################################
 # nlp setting                                                               #
@@ -387,6 +371,19 @@ RUN tar -xf neo4j-community-3.1.3-unix.tar.gz
 #RUN mv neo4j-community-3.1.2 neo4j
 RUN rm -f neo4j-community-3.1.3-unix.tar.gz 
 EXPOSE 7474 7678 5555
+#############################################################################
+# nginx uwsgi setting                      #
+#############################################################################
+
+COPY uwsgi /home/dev/uwsgi
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+
+#############################################################################
+# Memcached                                #
+#############################################################################
+
+RUN apt-get update && apt-get install -y --no-install-recommends memcached python-memcache && rm -rf /var/lib/apt/lists/*
+
 
 ############################################################################
 # pip & entrypoint setting                                #
@@ -402,6 +399,14 @@ RUN rm -rf /tmp/pip && \
     rm -rf /root/.cache
 
 
+############################################################################
+# make data src path sharing                              #
+#############################################################################
+RUN mkdir /hoya_src_root
+RUN mkdir /hoya_str_root
+RUN mkdir /hoya_model_root
+RUN mkdir /home/dev/hoyai_jupyter
+RUN mkdir /home/dev/hoyai_playground
 
 
 COPY runtime/ ${PG_APP_HOME}/

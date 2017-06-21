@@ -142,7 +142,7 @@ WORKDIR /home/dev
 RUN wget https://download.jetbrains.com/python/pycharm-community-2017.1.2.tar.gz 
  
 RUN tar -xvf pycharm-community-2017.1.2.tar.gz 
-RUN mv pycharm-community-2017.1.2.tar.gz pyc
+RUN mv pycharm-community-2017.1.2 pyc
 RUN ln -s /home/dev/pyc/bin/pycharm.sh /usr/bin/pycharm
 RUN rm -f pycharm-community-2017.1.2.tar.gz 
 #############################################################################
