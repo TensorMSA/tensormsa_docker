@@ -178,6 +178,23 @@ b>12. Docker rebuild setup list</b> </br>
 ```
 
 
+b>13. Docker rebuild setup list</b> </br>
+```
+su postgres
+
+
+pg_dump -Fc tensormsa > /hoya_src_root/postgres_backup/postgres_backup_07_10_2.dump
+
+cp /var/nfs/hoya_src_root/postgres_backup/postgres_backup_07_10_2.dump ./
+
+
+pg_restore -c -d tensormsa tensormsa.dump
+
+GRANT ALL ON schema public TO tfmsauser;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO tfmsauser;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO tfmsauser;
+```
+
 ---------------------------before--------------------------------------------------------<br>
 <b>1.Install Xming </b> </br>
    - download Xming : https://sourceforge.net/projects/xming/ </br>
