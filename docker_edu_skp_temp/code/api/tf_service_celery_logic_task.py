@@ -6,7 +6,9 @@ from .tf_service_logic import TfExamBackendService as tebs
 def train(num):
     print("train delay started")
     try:
-        tf_result = tebs.tf_logic_train( num)
+        tf_class = tebs()
+        #tf_result = tf_class.tf_logic_train(num)
+        tf_result = tf_class.tf_logic_train_reduce_sum(num)
     except Exception as e:
         print(str(e))
         tf_result = str(e)
