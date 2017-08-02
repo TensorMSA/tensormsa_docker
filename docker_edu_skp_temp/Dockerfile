@@ -85,6 +85,7 @@ COPY run_jupyter.sh /
 EXPOSE 6006
 # IPython
 EXPOSE 8888
+EXPOSE 8000
 RUN mkdir /code
 ADD requirements.txt /code/
 WORKDIR /code
@@ -98,6 +99,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends vim && \
     rm -rf /var/lib/apt/lists/*
 COPY run_celery.sh /
+COPY run_django.sh /
+
 
 CMD ["/run_jupyter.sh"]
 
