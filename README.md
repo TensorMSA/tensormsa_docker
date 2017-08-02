@@ -245,3 +245,12 @@ docker run -itd  --env="VNC_RESOLUTION=1920x1080" --env="DISPLAY" --env="QT_X11_
    ```bash
        /usr/bin/google-chrome --no-sandbox
    ```
+   
+ <b>11.Docker VNC </b> </br>   
+   Browser it doesn't crash
+   ```bash
+   docker run -itd -p 6080:80 -p 5902:5900 -e VNC_PASSWORD=mypassword hoyai/ubuntu_vnc --name hoyai_documents
+   ```
+   ```bash
+   http://xxx.xx.xx.xxx:6080
+   ```
