@@ -50,7 +50,9 @@
    - Changes Resolution for vnc = VNC_RESOLUTION=<b>"1920x1080"</b> </br>
    ```bash
    
-     docker run -itd --env="VNC_RESOLUTION=1920x1080" --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --name hoyai_dev -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 8888:8888 -p 5901:5901 hoyai/hoyai_dev_docker:squashed
+     docker run -itd --env="VNC_RESOLUTION=1920x1080" --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --name hoyai_dev -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 8888:8888 -p 5901:5901 hoyai/hoyai_dev_docker:squashed2
+     
+     docker run -itd --env="VNC_RESOLUTION=1920x1080" --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --volume="/hoya_src_root:/hoya_src_root" --volume="/hoya_model_root:/hoya_model_root" --volume="/hoya_str_root:/hoya_str_root" --volume="/hoya_data_root:/hoya_data_root" --name hoyai_dev -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 8888:8888 -p 5901:5901 hoyai/hoyai_dev_docker:squashed2
      
      gpu
     nvidia-docker run -itd --env="VNC_RESOLUTION=1920x1080" --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --name hoyai_dev -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 8888:8888 -p 5901:5901 hoyai/hoyai_gpu_dev_docker:v1.0
@@ -242,4 +244,13 @@ docker run -itd  --env="VNC_RESOLUTION=1920x1080" --env="DISPLAY" --env="QT_X11_
  <b>10.Run Chrome </b> </br>
    ```bash
        /usr/bin/google-chrome --no-sandbox
+   ```
+   
+ <b>11.Docker VNC </b> </br>   
+   Browser it doesn't crash
+   ```bash
+   docker run -itd -p 6080:80 -p 5902:5900 -e VNC_PASSWORD=mypassword hoyai/ubuntu_vnc --name hoyai_documents
+   ```
+   ```bash
+   http://xxx.xx.xx.xxx:6080
    ```
