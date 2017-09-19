@@ -1,0 +1,16 @@
+from master.workflow.preprocess.workflow_pre import WorkFlowPre
+
+class WorkflowFeedImg2Cnn(WorkFlowPre):
+    """
+
+    """
+
+    def __init__(self, key = None):
+        """
+        init key variable
+        :param key:
+        :return:
+        """
+        self.key = key
+        self._set_key_parms([])
+        self._set_prhb_parms([])
