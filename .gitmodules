@@ -1,0 +1,6 @@
+[submodule "docker_compose_cpu/tensormsa"]
+	path = docker_compose_cpu/tensormsa
+	url = https://github.com/TensorMSA/tensormsa.git
+[submodule "docker_compose_cpu/tensormsa_jupyter"]
+	path = docker_compose_cpu/tensormsa_jupyter
+	url = https://github.com/TensorMSA/tensormsa_jupyter.git

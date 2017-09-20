@@ -296,10 +296,11 @@ WORKDIR /code
 RUN pip install -r requirements.txt
 
 COPY run_nginx.sh /
-
+RUN mkdir /jupyter
 WORKDIR /code
-
-
+EXPOSE 5555
+EXPOSE 8018
+COPY run_flower.sh /
 CMD ["/bin/bash"]
 #CMD ["/run_jupyter.sh"]
 

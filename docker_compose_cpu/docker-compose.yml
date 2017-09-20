@@ -14,7 +14,9 @@ services:
       - ./hoya_src_root:/hoya_src_root
       - ./hoya_str_root:/hoya_str_root
       - ./hoya_model_root:/hoya_model_root
+      - ./tensormsa_jupyter:/jupyter
     tty: true
+    command: bash -c "(/run_nginx.sh)&&(/run_vnc.sh &)&&(/run_jupyter.sh &)&&(/run_flower.sh &)&&/bin/bash;"
     ports:
       - "8888:8888"
       - "8989:8989"
@@ -45,16 +47,17 @@ services:
     ports:
       - "5672:5672"  # we forward this port because it's useful for debugging
       - "15672:15672"  # here, we can access rabbitmq management plugin
-#  celery:
-#    image: hoyai/tensormsa_dev_dc:v1.0
-#    volumes:
-#      - ./code:/home/dev/tensormsa
-#      - ./hoya_src_root:/hoya_src_root
-#      - ./hoya_str_root:/hoya_str_root
-#      - ./hoya_model_root:/hoya_model_root
-    #command: bash -c "(/home/dev/tensormsa/celery -A hoyai -l info &);"
-#    depends_on:
-#      - rabbit
+  celery:
+    image: hoyai/tensormsa_dev_dc:v1.0
+    volumes:
+      - ./code:/home/dev/tensormsa
+      - ./hoya_src_root:/hoya_src_root
+      - ./hoya_str_root:/hoya_str_root
+      - ./hoya_model_root:/hoya_model_root
+    tty: true
+    command: bash -c "(/run_celery.sh &)&&/bin/bash;"
+    depends_on:
+      - rabbit
 volumes:
     pg_data:
      external: true
