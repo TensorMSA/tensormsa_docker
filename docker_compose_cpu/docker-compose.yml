@@ -9,8 +9,8 @@ services:
     image: hoyai/tensormsa_dev_dc:v1.0
     env_file: .env
     volumes:
-      - ./code:/home/dev/tensormsa
-      - ./code/gui/dist:/dist
+      - ./tensormsa:/home/dev/tensormsa
+      - ./tensormsa/gui/dist:/dist
       - ./hoya_src_root:/hoya_src_root
       - ./hoya_str_root:/hoya_str_root
       - ./hoya_model_root:/hoya_model_root
@@ -30,9 +30,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./code:/home/dev/tensormsa
+      - ./tensormsa:/home/dev/tensormsa
       - ./config/nginx:/etc/nginx/conf.d
-      - ./code/gui/dist:/dist
+      - ./tensormsa/gui/dist:/dist
     depends_on:
       - web
     env_file: .env
@@ -50,7 +50,7 @@ services:
   celery:
     image: hoyai/tensormsa_dev_dc:v1.0
     volumes:
-      - ./code:/home/dev/tensormsa
+      - ./tensormsa:/home/dev/tensormsa
       - ./hoya_src_root:/hoya_src_root
       - ./hoya_str_root:/hoya_str_root
       - ./hoya_model_root:/hoya_model_root
