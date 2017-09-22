@@ -15,6 +15,7 @@ services:
       - ./hoya_str_root:/hoya_str_root
       - ./hoya_model_root:/hoya_model_root
       - ./tensormsa_jupyter:/jupyter
+      - ./tensormsa_gui:/home/dev/tensormsa_gui
     tty: true
     command: bash -c "(/run_nginx.sh)&&(/run_vnc.sh &)&&(/run_jupyter.sh &)&&(/run_flower.sh &)&&/bin/bash;"
     ports:
@@ -23,6 +24,7 @@ services:
       - "5555:5555"
       - "5901:5901"
       - "8018:8018"
+      - "8889:8889"
     depends_on:
       - db
   nginx:

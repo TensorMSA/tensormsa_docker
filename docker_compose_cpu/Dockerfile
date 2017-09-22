@@ -290,13 +290,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends graphviz && rm 
 ###########################################################
 #                         pip    			  #
 ###########################################################
-ADD . /code/
+#ADD . /code/
 ADD requirements.txt /code/
 WORKDIR /code
 RUN pip install -r requirements.txt
 
 COPY run_nginx.sh /
 RUN mkdir /jupyter
+RUN mkdir /home/dev/tensormsa_gui
+WORKDIR /home/dev/tensormsa_gui
+
 WORKDIR /code
 EXPOSE 5555
 EXPOSE 8018
