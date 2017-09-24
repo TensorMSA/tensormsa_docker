@@ -110,4 +110,7 @@
 - <ip:5555> for celery
 - <ip:8000> for django
 - <ip:5901> for vnc
+
 ![celery](./img/celery.jpg)
+![juppter](./img/jupyter.jpg)
+![vnc](./img/vnc.jpg)
