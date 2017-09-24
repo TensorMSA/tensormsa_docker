@@ -8,6 +8,7 @@
  - 17.2.4             Firefox Fix, Chrome Installed, Korean Font Installed</br>
  - 17.3.1             Tensorflow 1.0, RabbitMQ, Vnc Server, Xfce4 Installed  </br>
  - 17.4.11            Tensorflow 1.1(Complie), Neo4j, flower, mecab Installed   </br>
+ - 17.8.23            Django Rest, nginx, postgres, celery (official version) composed by Docker-compose</br>
 
 <b>Summeries</b> </br>
  - python 3.5
@@ -27,15 +28,18 @@
  
    
 <b>1.Prerequisite </b> </br>
-   - Docker 1.13 on ubuntu 16.04</br>
-   - How to install : https://docs.docker.com/engine/installation/linux/ubuntu/ <br>
-   - Add 127.0.0.1 ip-xxx-xx-x-xx to /etc/hosts (ubuntu@ip-XX-XX-X-XXX in console)<br>
+ - Docker ce, Docker-Compose (lastest version) on ubuntu 16.04</br>
+ - How to install for docker: https://docs.docker.com/engine/installation/ <br>
+ - How to install for docker: https://docs.docker.com/compose/install/ <br>
+   
    
-   ```bash
-   - unset DISPLAY
-    ```
+<b>2.git pull  </b> </br>
+ - Docker ce, Docker-Compose (lastest version) on ubuntu 16.04</br>
+ - How to install for docker: https://docs.docker.com/engine/installation/ <br>
+ - How to install for docker: https://docs.docker.com/compose/install/ <br>
+
    
-<b>2.User add ubuntu </b> </br>
+<b>11.etc </b> </br>
    ```bash
      sudo groupadd docker
      sudo gpasswd -a ubuntu docker
