@@ -51,7 +51,7 @@
      docker volume create pg_data
    ```
 - check volume
-  ```bash
+ ```bash
     docker volume inspect pg_data
  ```
 
