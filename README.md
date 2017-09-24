@@ -89,6 +89,15 @@
      docker-compose up -d
    ```
    
+<b>8.Django make static files and migrate </b> </br>
+- Make static files and migrate
+   ```bash
+     docker-compose run web python /home/dev/tensormsa/manage.py collectstatic
+     docker-compose run web python /home/dev/tensormsa/manage.py makemigrations
+     docker-compose run web python /home/dev/tensormsa/manage.py migrate
+   ```
+
+   
 <b>8.Scale up Dynamically </b> </br>
 - 3 node celery
    ```bash
