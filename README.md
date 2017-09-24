@@ -33,24 +33,25 @@
  - How to install for docker: https://docs.docker.com/compose/install/ <br>
    
    
-<b>2.git pull  </b> </br>
- - Docker ce, Docker-Compose (lastest version) on ubuntu 16.04</br>
- - How to install for docker: https://docs.docker.com/engine/installation/ <br>
- - How to install for docker: https://docs.docker.com/compose/install/ <br>
+<b>2.git clone  </b> </br>
+ - git clone
+ ```bash
+ git clone https://github.com/TensorMSA/tensormsa_docker.git
+ ```
+    
+<b>3.move docker-compose folder </b> </br>
+- move to docker-compose-folder
+   ```bash
+     cd ./tensormsa_docker/docker_compose_cpu
+   ```
 
+<b>4.Docker-compose start </b> </br>
+- start up tensormsa of docker-compose version
+   ```bash
+     sudo docker-compose up
+   ```
    
-<b>11.etc </b> </br>
-   ```bash
-     sudo groupadd docker
-     sudo gpasswd -a ubuntu docker
-   ```
-   * Test command : docker ps(By ubuntu id) - restart AWS 
-
-<b>3.Download Docker Images </b> </br>
-   ```bash
-     docker pull hoyai/hoyai_dev_docker:squashed
-   ```
-<b>4.Run Docker Container </b> </br>
+<b>5.Run Docker Container </b> </br>
    - Changes Resolution for vnc = VNC_RESOLUTION=<b>"1920x1080"</b> </br>
    ```bash
    
