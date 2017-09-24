@@ -34,9 +34,9 @@
    
    
 <b>2.git clone  </b> </br>
- - git clone
+ - Get all source Tensormsa Docker and Tensermsa source recursively.
  ```bash
- git clone https://github.com/TensorMSA/tensormsa_docker.git
+ git clone --recursive https://github.com/TensorMSA/tensormsa_docker.git
  ```
     
 <b>3.move docker-compose folder </b> </br>
@@ -44,12 +44,40 @@
    ```bash
      cd ./tensormsa_docker/docker_compose_cpu
    ```
+   
+<b>4.make docker volume for postgres db </b> </br>
+- make docker volume
+   ```bash
+     docker volume create pg_data
+   ```
+- check volume
+  ```bash
+    docker volume inspect pg_data
+ ```
 
 <b>4.Docker-compose start </b> </br>
 - start up tensormsa of docker-compose version
+- locaion : /docker_compose_cpu/tensormsa/hoyai/settings.py
    ```bash
-     sudo docker-compose up
+     vi settings.py
+     DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': 'db',
+            'PORT': '5432',
+        }
+    }
    ```
+
+<b>5.Change Django DB connections </b> </br>
+- change for settings.py 
+   ```bash
+     
+   ```
+
    
 <b>5.Run Docker Container </b> </br>
    - Changes Resolution for vnc = VNC_RESOLUTION=<b>"1920x1080"</b> </br>
