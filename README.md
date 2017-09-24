@@ -33,31 +33,30 @@
  - How to install for docker: https://docs.docker.com/compose/install/ <br>
    
    
-<b>2.git clone  </b> </br>
+<b>2.Git clone  </b> </br>
  - Get all source Tensormsa Docker and Tensermsa source recursively.
  ```bash
  git clone --recursive https://github.com/TensorMSA/tensormsa_docker.git
  ```
     
-<b>3.move docker-compose folder </b> </br>
-- move to docker-compose-folder
+<b>3.Move docker-compose folder </b> </br>
+- Move to docker-compose-folder
    ```bash
      cd ./tensormsa_docker/docker_compose_cpu
    ```
    
-<b>4.make docker volume for postgres db </b> </br>
-- make docker volume
+<b>4.Make docker volume for postgres db </b> </br>
+- Make docker volume
    ```bash
      docker volume create pg_data
    ```
-- check volume
+- Check volume
  ```bash
     docker volume inspect pg_data
  ```
 
-<b>4.Docker-compose start </b> </br>
-- start up tensormsa of docker-compose version
-- locaion : /docker_compose_cpu/tensormsa/hoyai/settings.py
+<b>5.Change DB Connections  </b> </br>
+- Locaion : /docker_compose_cpu/tensormsa/hoyai/settings.py
    ```bash
      vi settings.py
      DATABASES = {
@@ -71,13 +70,30 @@
         }
     }
    ```
+<b>6.Check enviroment parameters and passwords  </b> </br>
+- Locaion : /docker_compose_cpu/.env
+```bash
+  JUPYTER_PASSWORD=1111
+  VNC_RESOLUTION=1920x1080
+  DISPLAY=:1
+  VNC_PW=11111111
+```
 
-<b>5.Change Django DB connections </b> </br>
-- change for settings.py 
+<b>7.Docker-compose up </b> </br>
+- Start Docker-compose up
    ```bash
-     
+     docker-compose up 
    ```
-
+   or running background
+   ```bash
+     docker-compose up -d
+   ```
+   
+<b>8.Scale up Dynamically </b> </br>
+- 3 node celery
+   ```bash
+     docker-compose scale celery=3
+     ```
    
 <b>5.Run Docker Container </b> </br>
    - Changes Resolution for vnc = VNC_RESOLUTION=<b>"1920x1080"</b> </br>
