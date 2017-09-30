@@ -4,16 +4,16 @@
 # Install
 
 <b>History</b> </br>
- - 17.2.3             Initial</br>
- - 17.2.4             Firefox Fix, Chrome Installed, Korean Font Installed</br>
- - 17.3.1             Tensorflow 1.0, RabbitMQ, Vnc Server, Xfce4 Installed  </br>
- - 17.4.11            Tensorflow 1.1(Complie), Neo4j, flower, mecab Installed   </br>
- - 17.8.23            Django Rest, nginx, postgres, celery (official version) composed by Docker-compose</br>
+ - 17.2.3 : Initial</br>
+ - 17.2.4 : Firefox Fix, Chrome Installed, Korean Font Installed</br>
+ - 17.3.1 : Tensorflow 1.0, RabbitMQ, Vnc Server, Xfce4 Installed  </br>
+ - 17.4.11: Tensorflow 1.1(Complie), Neo4j, flower, mecab Installed   </br>
+ - 17.8.23 : Django Rest, nginx, postgres, celery (official version) composed by Docker-compose</br>
 
 <b>Summeries</b> </br>
  - python 3.5
  - conda
- - Tensorflow r0.12
+ - Tensorflow v1.1
  - Django
  - postgres 9.6
  - Pycharm Comunity 
@@ -46,9 +46,9 @@
    ```
    
 <b>4.Make docker volume for postgres db </b> </br>
-- Make docker volume
+- Make docker volume (Run as root)
    ```bash
-     docker volume create pg_data
+     docker volume create --name=pg_data
    ```
 - Check volume
  ```bash
@@ -73,13 +73,13 @@
 <b>6.Check enviroment parameters and passwords  </b> </br>
 - Locaion : /docker_compose_cpu/.env
 ```bash
-  JUPYTER_PASSWORD=1111
+  JUPYTER_PASSWORD=your password
   VNC_RESOLUTION=1920x1080
   DISPLAY=:1
-  VNC_PW=11111111
+  VNC_PW=your password
 ```
 
-<b>7.Docker-compose up </b> </br>
+<b>7.Docker-compose up (>= v1.13) </b> </br>
 - Start Docker-compose up
    ```bash
      docker-compose up 
