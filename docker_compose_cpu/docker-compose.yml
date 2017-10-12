@@ -10,12 +10,13 @@ services:
     env_file: .env
     volumes:
       - ./tensormsa:/home/dev/tensormsa
-      - ./tensormsa/gui/dist:/dist
+      - ./tensormsa/gui:/dist
       - ./hoya_src_root:/hoya_src_root
       - ./hoya_str_root:/hoya_str_root
       - ./hoya_model_root:/hoya_model_root
       - ./tensormsa_jupyter:/jupyter
       - ./tensormsa_gui:/home/dev/tensormsa_gui
+      - ./hoya_log_root:/hoya_log_root
     tty: true
     command: bash -c "(/run_nginx.sh)&&(/run_vnc.sh &)&&(/run_jupyter.sh &)&&(/run_flower.sh &)&&/bin/bash;"
     ports:
@@ -34,7 +35,7 @@ services:
     volumes:
       - ./tensormsa:/home/dev/tensormsa
       - ./config/nginx:/etc/nginx/conf.d
-      - ./tensormsa/gui/dist:/dist
+      - ./tensormsa/gui:/dist
     depends_on:
       - web
     env_file: .env
@@ -56,6 +57,7 @@ services:
       - ./hoya_src_root:/hoya_src_root
       - ./hoya_str_root:/hoya_str_root
       - ./hoya_model_root:/hoya_model_root
+      - ./hoya_log_root:/hoya_log_root
     tty: true
     command: bash -c "(/run_celery.sh &)&&/bin/bash;"
     depends_on:
