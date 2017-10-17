@@ -6,7 +6,7 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data/
   web:
-    image: hoyai/tensormsa_dev_dc:v1.0
+    image: hoyai/tensormsa_dev_dc:v1.1
     env_file: .env
     volumes:
       - ./tensormsa:/home/dev/tensormsa
@@ -51,7 +51,7 @@ services:
       - "5672:5672"  # we forward this port because it's useful for debugging
       - "15672:15672"  # here, we can access rabbitmq management plugin
   celery:
-    image: hoyai/tensormsa_dev_dc:v1.0
+    image: hoyai/tensormsa_dev_dc:v1.1
     volumes:
       - ./tensormsa:/home/dev/tensormsa
       - ./hoya_src_root:/hoya_src_root
