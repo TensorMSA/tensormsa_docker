@@ -95,6 +95,7 @@
      docker-compose run web python /home/dev/tensormsa/manage.py collectstatic
      docker-compose run web python /home/dev/tensormsa/manage.py makemigrations
      docker-compose run web python /home/dev/tensormsa/manage.py migrate
+     npm run build static 
    ```
 
    
