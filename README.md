@@ -55,7 +55,36 @@
     docker volume inspect pg_data
  ```
 
-<b>5.Change DB Connections  </b> </br>
+<b>5.Docker-compose up (>= v1.13) </b> </br>
+- Start Docker-compose up
+   ```bash
+     docker-compose up -d
+   ```
+
+   
+<b>6.Django make static files and migrate </b> </br>
+- Make static files and migrate
+   ```bash
+     docker-compose run web python /home/dev/tensormsa/manage.py collectstatic
+     docker-compose run web python /home/dev/tensormsa/manage.py makemigrations
+     docker-compose run web python /home/dev/tensormsa/manage.py migrate
+   ```
+
+   
+<b>7.Scale up Dynamically </b> </br>
+- 3 node celery
+   ```bash
+     docker-compose scale celery=3
+   ```
+   
+<b>8.Testing </b> </br>
+- <ip:8018> for jupyter
+- <ip:5555> for celery
+- <ip:8000> for django
+- <ip:5901> for vnc
+
+
+<b>Check 1. Change DB Connections  </b> </br>
 - Locaion : /docker_compose_cpu/tensormsa/hoyai/settings.py
    ```bash
      vi settings.py
@@ -70,7 +99,8 @@
         }
     }
    ```
-<b>6.Check enviroment parameters and passwords  </b> </br>
+   
+<b>Check 2. Check enviroment parameters and passwords  </b> </br>
 - Locaion : /docker_compose_cpu/.env
 ```bash
   JUPYTER_PASSWORD=your password
@@ -78,39 +108,6 @@
   DISPLAY=:1
   VNC_PW=your password
 ```
-
-<b>7.Docker-compose up (>= v1.13) </b> </br>
-- Start Docker-compose up
-   ```bash
-     docker-compose up 
-   ```
-   or running background
-   ```bash
-     docker-compose up -d
-   ```
-   
-<b>8.Django make static files and migrate </b> </br>
-- Make static files and migrate
-   ```bash
-     docker-compose run web python /home/dev/tensormsa/manage.py collectstatic
-     docker-compose run web python /home/dev/tensormsa/manage.py makemigrations
-     docker-compose run web python /home/dev/tensormsa/manage.py migrate
-     npm run build static 
-   ```
-
-   
-<b>9.Scale up Dynamically </b> </br>
-- 3 node celery
-   ```bash
-     docker-compose scale celery=3
-   ```
-   
-   
-<b>10.Testing </b> </br>
-- <ip:8018> for jupyter
-- <ip:5555> for celery
-- <ip:8000> for django
-- <ip:5901> for vnc
 
 ![celery](./img/celery.jpg)
 ![juppter](./img/jupyter.jpg)
