@@ -36,6 +36,7 @@ services:
       - ./tensormsa:/home/dev/tensormsa
       - ./config/nginx:/etc/nginx/conf.d
       - ./tensormsa/gui:/templates
+      - ./hoya_log_root:/hoya_log_root
     depends_on:
       - web
     env_file: .env
