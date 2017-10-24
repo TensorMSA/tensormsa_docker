@@ -18,7 +18,7 @@ services:
       - ./tensormsa_gui:/home/dev/tensormsa_gui
       - ./hoya_log_root:/hoya_log_root
     tty: true
-    command: bash -c "(/run_nginx.sh)&&(/run_vnc.sh &)&&(/run_jupyter.sh &)&&(/run_flower.sh &)&&/bin/bash;"
+    command: bash -c "(/run_nginx.sh)&&(/run_vnc.sh &)&&(/run_jupyter.sh &)&&(/run_flower.sh &)&&(/run_npm.sh)&&/bin/bash;"
     ports:
       - "8888:8888"
       - "8989:8989"

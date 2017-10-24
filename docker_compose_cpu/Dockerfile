@@ -2,6 +2,9 @@ FROM ubuntu:16.04
 
 MAINTAINER Craig Citro <craigcitro@google.com>
 # set locale ko_KR
+
+RUN apt-get clean && apt-get update && apt-get install -y locales
+
 RUN locale-gen ko_KR.UTF-8
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -304,6 +307,7 @@ WORKDIR /code
 EXPOSE 5555
 EXPOSE 8018
 COPY run_flower.sh /
+COPY run_npm.sh /
 CMD ["/bin/bash"]
 #CMD ["/run_jupyter.sh"]
 
