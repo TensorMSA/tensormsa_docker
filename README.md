@@ -109,6 +109,15 @@
   VNC_PW=your password
 ```
 
+<b>Check 3. Docker container volumne resize(ubuntu 16.04, docker-ce 17.09)  </b> </br>
+
+```bash
+  sudo service docker stop
+  sudo dockerd --storage-opt dm.basesize=50G
+  docker info
+  sudo service docker stop
+```
+
 ![celery](./img/celery.jpg)
 ![juppter](./img/jupyter.jpg)
 ![vnc](./img/vnc.jpg)
