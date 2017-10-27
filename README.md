@@ -66,8 +66,13 @@
 - Make static files and migrate
    ```bash
      docker-compose run web python /home/dev/tensormsa/manage.py collectstatic
+        enter 'Yes'
      docker-compose run web python /home/dev/tensormsa/manage.py makemigrations
      docker-compose run web python /home/dev/tensormsa/manage.py migrate
+        
+        If you need chatbot funtion?
+     docker-compose run web python /home/dev/tensormsa/manage.py makemigrations chatbot
+     docker-compose run web python /home/dev/tensormsa/manage.py migrate chatbot
    ```
 
    
