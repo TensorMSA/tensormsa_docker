@@ -1,7 +1,7 @@
 version: '3'
 services:
   db:
-    image: postgres:latest
+    image: postgres:9.6
     env_file: .env
     volumes:
       - pg_data:/var/lib/postgresql/data/
