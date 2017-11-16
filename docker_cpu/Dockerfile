@@ -4,36 +4,40 @@
 FROM ubuntu:16.04
 MAINTAINER yewoo <intwis100@naver.com>
 
-# locale for tokyo
-RUN cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+# set locale ko_KR
+
+RUN apt-get clean && apt-get update && apt-get install -y locales
+
+RUN locale-gen ko_KR.UTF-8
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-
-# enable apt multiverse repository
-RUN apt-get update && \
-    apt-get install -y software-properties-common python-software-properties && \
-    add-apt-repository multiverse
-
-# Disable frontend
+# Pick up some TF dependencies
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install wget and build-essential
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential wget  linux-generic && \
+RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common build-essential linux-generic && \
   rm -rf /var/lib/apt/lists/*
+
+
+RUN apt-get update \
+     && apt-get install -y firefox-locale-ko fcitx-hangul  language-pack-ko language-pack-gnome-ko language-pack-ko-base language-pack-gnome-ko-base \
+     && apt-get autoclean \
+     && apt-get autoremove \
+     && rm -rf /var/lib/apt/lists/*
   
 
 ##############################################################################
 # anaconda python
 ##############################################################################
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends bzip2 ca-certificates libmysqlclient-dev && \
+    apt-get install -y --no-install-recommends bzip2 ca-certificates libmysqlclient-dev wget && \
     rm -rf /var/lib/apt/lists/* 
 
-RUN wget --quiet https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh && \
-    /bin/bash Anaconda3-4.2.0-Linux-x86_64.sh -b -p /opt/conda && \                                 
-    rm Anaconda3-4.2.0-Linux-x86_64.sh
+RUN wget --no-check-certificate https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh && \
+/bin/bash Anaconda3-5.0.1-Linux-x86_64.sh -b -p /opt/conda && \
+rm Anaconda3-5.0.1-Linux-x86_64.sh
 
 
 
@@ -71,7 +75,7 @@ ENV PG_APP_HOME="/etc/docker-postgresql"\
 ENV PG_BINDIR=/usr/lib/postgresql/${PG_VERSION}/bin \
     PG_DATADIR=${PG_HOME}/${PG_VERSION}/main
 
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+RUN wget --quiet --no-check-certificate -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
  && echo 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y acl \
@@ -138,7 +142,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends xauth && rm -rf
 RUN mkdir /home/dev
 RUN cd /home/dev
 WORKDIR /home/dev
-RUN wget https://download.jetbrains.com/python/pycharm-community-2017.1.2.tar.gz
+RUN wget --no-check-certificate https://download.jetbrains.com/python/pycharm-community-2017.1.2.tar.gz
 
 RUN tar -xvf pycharm-community-2017.1.2.tar.gz
 RUN mv pycharm-community-2017.1.2 pyc
@@ -266,50 +270,50 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # we either update the base image beyond 14.04 or openjdk-8 is
 # finally backported to trusty; see e.g.
 #   https://bugs.launchpad.net/trusty-backports/+bug/1368094
-RUN add-apt-repository -y ppa:openjdk-r/ppa && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends openjdk-8-jdk openjdk-8-jre-headless && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+#RUN add-apt-repository -y ppa:openjdk-r/ppa && \
+#    apt-get update && \
+#    apt-get install -y --no-install-recommends openjdk-8-jdk openjdk-8-jre-headless && \
+#    apt-get clean && \
+#    rm -rf /var/lib/apt/lists/*
 
 
 # Running bazel inside a `docker build` command causes trouble, cf:
 #   https://github.com/bazelbuild/bazel/issues/134
 # The easiest solution is to set up a bazelrc file forcing --batch.
-RUN echo "startup --batch" >>/etc/bazel.bazelrc
+#RUN echo "startup --batch" >>/etc/bazel.bazelrc
 # Similarly, we need to workaround sandboxing issues:
 #   https://github.com/bazelbuild/bazel/issues/418
-RUN echo "build --spawn_strategy=standalone --genrule_strategy=standalone" \
-    >>/etc/bazel.bazelrc
+#RUN echo "build --spawn_strategy=standalone --genrule_strategy=standalone" \
+#    >>/etc/bazel.bazelrc
 # Install the most recent bazel release.
-ENV BAZEL_VERSION 0.4.5
-WORKDIR /
-RUN mkdir /bazel && \
-    cd /bazel && \
-    curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36" -fSsL -O https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
-    curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36" -fSsL -o /bazel/LICENSE.txt https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE && \
-    chmod +x bazel-*.sh && \
-    ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
-    cd / && \
-    rm -f /bazel/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+#ENV BAZEL_VERSION 0.4.5
+#WORKDIR /
+#RUN mkdir /bazel && \
+#    cd /bazel && \
+#    curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36" -fSsL -O https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
+#    curl -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36" -fSsL -o /bazel/LICENSE.txt https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE && \
+#    chmod +x bazel-*.sh && \
+#    ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
+#    cd / && \
+#    rm -f /bazel/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
 
-RUN cd /home/dev/
-WORKDIR /home/dev
-RUN git clone https://github.com/tensorflow/tensorflow.git && \
-    cd tensorflow && \
-    git checkout r1.1
-WORKDIR /home/dev/tensorflow
+#RUN cd /home/dev/
+#WORKDIR /home/dev
+#RUN git clone https://github.com/tensorflow/tensorflow.git && \
+#    cd tensorflow && \
+#    git checkout r1.1
+#WORKDIR /home/dev/tensorflow
 
 # TODO(craigcitro): Don't install the pip package, since it makes it
 # more difficult to experiment with local changes. Instead, just add
 # the built directory to the path.
 
-ENV CI_BUILD_PYTHON python
+#ENV CI_BUILD_PYTHON python
 
-RUN tensorflow/tools/ci_build/builds/configured CPU \
-    bazel build -c opt tensorflow/tools/pip_package:build_pip_package 
+#RUN tensorflow/tools/ci_build/builds/configured CPU \
+#    bazel build -c opt tensorflow/tools/pip_package:build_pip_package 
 
-RUN bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip 
+#RUN bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip 
 
 
 
@@ -317,10 +321,11 @@ RUN bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip
 #    python get-pip.py && \
 #    rm get-pip.py
 
-RUN pip install /tmp/pip/tensorflow-*.whl 
-RUN rm -rf /tmp/pip && \
-    rm -rf /root/.cache
-
+#RUN pip install /tmp/pip/tensorflow-*.whl 
+#RUN rm -rf /tmp/pip && \
+#    rm -rf /root/.cache
+RUN pip install --upgrade --trusted-host pypi.python.org \
+ https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp36-cp36m-linux_x86_64.whl
 # Clean up pip wheel and Bazel cache when done.
 # TensorBoard
 EXPOSE 6006
@@ -330,7 +335,7 @@ EXPOSE 6006
 #############################################################################
 RUN apt-get update && apt-get install -y --no-install-recommends openjdk-8-jdk && rm -rf /var/lib/apt/lists/*
 
-
+RUN conda config --set ssl_verify false
 RUN conda install -y -c  conda-forge jpype1
 RUN conda install -y  mkl
 
@@ -338,13 +343,13 @@ RUN mkdir /home/dev/mecab
 RUN cd /home/dev/mecab
 WORKDIR /home/dev/mecab
 
-RUN curl -O https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh
+RUN curl -fSsL -O https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh
 RUN chmod +x mecab.sh
 RUN ./mecab.sh
 
 RUN conda install -y libgcc
 
-RUN wget https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.0.1-20150920.tar.gz \
+RUN wget --no-check-certificate https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.0.1-20150920.tar.gz \
 && tar xzvf mecab-ko-dic-2.0.1-20150920.tar.gz \
 && cd mecab-ko-dic-2.0.1-20150920 \
 && sudo ldconfig \
@@ -407,6 +412,56 @@ RUN mkdir /hoya_str_root
 RUN mkdir /hoya_model_root
 RUN mkdir /home/dev/hoyai_jupyter
 RUN mkdir /home/dev/hoyai_playground
+
+###########################################################
+#                         XGBOOST                         #
+###########################################################
+RUN apt-get update && apt-get install -y --no-install-recommends cmake python-setuptools && rm -rf /var/lib/apt/lists/*
+
+RUN cd /home/dev
+WORKDIR /home/dev
+RUN git clone --recursive https://github.com/dmlc/xgboost; exit 0
+
+
+RUN cd xgboost; make -j4
+RUN cd /home/dev/xgboost/python-package
+WORKDIR /home/dev/xgboost/python-package
+
+RUN python setup.py install
+RUN echo "export PYTHONPATH=/home/dev/xgboost/python-package" >> ~/.bashrc
+
+###########################################################
+#                         lightGBM                        #
+###########################################################
+
+RUN apt-get update && apt-get install -y --no-install-recommends cmake python-setuptools && rm -rf /var/lib/apt/lists/*
+
+
+RUN cd /home/dev
+WORKDIR /home/dev
+RUN git clone --recursive https://github.com/Microsoft/LightGBM ; cd LightGBM
+RUN mkdir build ; cd build
+WORKDIR /home/dev/LightGBM/build
+RUN cmake ..
+RUN make -j4
+
+
+#############################################################################
+# node.js npm  redmine                                    #
+#############################################################################
+RUN apt-get update && apt-get install -y --no-install-recommends curl
+RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+RUN apt-get update && apt-get install -y --no-install-recommends nodejs && rm -rf /var/lib/apt/lists/*
+RUN  add-apt-repository ppa:webupd8team/sublime-text-3
+RUN apt-get update && apt-get install -y --no-install-recommends sublime-text-installer && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends graphviz && rm -rf /var/lib/apt/lists/*
+
+
+#############################################################################
+# dlib                                        #
+#############################################################################
+
+RUN apt-get update && apt-get install -y --no-install-recommends cmake libboost-all-dev && rm -rf /var/lib/apt/lists/*
 
 
 COPY runtime/ ${PG_APP_HOME}/
