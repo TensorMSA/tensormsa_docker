@@ -123,6 +123,13 @@
   sudo service docker stop
 ```
 
+<b> etc. Single Docker run command
+'''bash
+nvidia-docker run -itd --env-file=".env" --name hoyai_dev -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 5901:5901 hoyai/tensormsa_dev_gpu_single:v1.0
+docker run -itd --env-file=".env" --name hoyai_dev -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 5901:5901 hoyai/tensormsa_dev_cpu_single:v1.0
+
+'''
+
 ![celery](./img/celery.jpg)
 ![juppter](./img/jupyter.jpg)
 ![vnc](./img/vnc.jpg)
