@@ -1,18 +1,8 @@
 
-# sk plenet edication docker
+# kcit edication docker
 
-## Remove & Get Docker
+##  Get Docker
 https://docs.docker.com/engine/installation/
-
-docker rm -f containerId
-
-docker rmi -f dockerImage
-
-apt-get -f install
-
-sudo apt-get remove docker*
-
-curl -s https://get.docker.com/ | sudo sh
 
 
 ## Get Docker-compose
@@ -22,35 +12,25 @@ curl -L https://github.com/docker/compose/releases/download/1.15.0/docker-compos
 
 chmod +x /usr/local/bin/docker-compose
 
+# Git clone
+cd ~
+git clone 
 
-## Resolution Change
-cd /home/ubuntu/skp_edu_docker/
+## Resolution Change and change password
+cd ~/tensormsa_docker/kict_edu_docker
 
 vi .env 
 
 VNC_RESOLUTION=1900x1028
+JUPYTER_PASSWORD=????
 
 
 ## Docker-compose up
-cd /home/ubuntu/skp_edu_docker/
-
-docker volume create --name=pg_data
+cd ~/tensormsa_docker/kict_edu_docker
 
 docker-compose up
 
 
-## Docker Celery Add
-docker-compose scale celery=3
-
-
-## Docker Celery Setup Change
-docker exec -it dockerId bash
-
-move root folder
-
-vi run_celery.sh
-
-## Docker Celery Setup Change Script
-cd /home/dev/tensormsa
-
-celery -A hoyai worker -l info
+## Connect to jupyter
+https://xx.xx.xx.xx:8888
+password : 1111
