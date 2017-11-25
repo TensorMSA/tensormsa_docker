@@ -14,7 +14,7 @@ chmod +x /usr/local/bin/docker-compose
 
 # Git clone
 cd ~
-git clone 
+git clone https://github.com/TensorMSA/tensormsa_docker.git
 
 ## Resolution Change and change password
 cd ~/tensormsa_docker/kict_edu_docker
