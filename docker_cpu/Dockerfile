@@ -35,13 +35,15 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends bzip2 ca-certificates libmysqlclient-dev wget && \
     rm -rf /var/lib/apt/lists/* 
 
-RUN wget --no-check-certificate https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh && \
-/bin/bash Anaconda3-5.0.1-Linux-x86_64.sh -b -p /opt/conda && \
-rm Anaconda3-5.0.1-Linux-x86_64.sh
+RUN wget --no-check-certificate https://repo.continuum.io/archive/Anaconda3-4.4.0-Linux-x86_64.sh && \
+/bin/bash Anaconda3-4.4.0-Linux-x86_64.sh -b -p /opt/conda && \
+rm Anaconda3-4.4.0-Linux-x86_64.sh
 
 
 
 ENV PATH /opt/conda/bin:$PATH
+
+RUN conda install python=3.6
 RUN pip install --upgrade pip
 
 
@@ -160,7 +162,7 @@ RUN rm -f pycharm-community-2017.1.2.tar.gz
 #############################################################################
 RUN cd /home/dev
 WORKDIR /home/dev
-RUN git clone https://github.com/TensorMSA/hoyai.git
+RUN git clone https://github.com/TensorMSA/tensormsa.git 
 
 RUN echo "export PYTHON_HOME=/opt/conda" >> ~/.bashrc
 RUN echo "export PATH=${PYTHON_HOME}/bin:$PATH" >> ~/.bashrc
@@ -169,12 +171,9 @@ RUN echo "export PATH=${PYTHON_HOME}/bin:$PATH" >> ~/.bashrc
 #############################################################################
 # chrome                                                                    #
 #############################################################################
-RUN apt-get update \
-    && apt-get install -y chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg \
-    && rm -rf /var/lib/apt/ \
-    && ln -s /usr/bin/chromium-browser /usr/bin/google-chrome \
-    # fix to start chromium in a Docker container
-    && echo "CHROMIUM_FLAGS='--no-sandbox --start-maximized --user-data-dir'" > ~/.chromium-browser.init
+RUN apt-get update && apt-get install -y chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg && rm -rf /var/lib/apt/lists/*
+RUN ln -s /usr/bin/chromium-browser /usr/bin/google-chrome
+RUN echo "CHROMIUM_FLAGS='--no-sandbox --start-maximized --user-data-dir'" > ~/.chromium-browser.init
 
 #############################################################################
 # naver nanum font                                                          #
@@ -197,8 +196,8 @@ RUN apt-get install -y --no-install-recommends language-pack-ko-base&& rm -rf /v
 RUN echo "LANG=\"ko_KR.UTF-8\"" >> ~/.bashrc
 
 
-RUN cd /home/dev/hoyai
-WORKDIR /home/dev/hoyai
+RUN cd /home/dev/tensormsa
+WORKDIR /home/dev/tensormsa
 
 
 #############################################################################
@@ -252,7 +251,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libpng12-dev \
         libzmq3-dev \
         pkg-config \
-        python-dev \
+        python3-dev \
+        python3-pip \
         rsync \
         software-properties-common \
         unzip \
@@ -324,7 +324,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 #RUN pip install /tmp/pip/tensorflow-*.whl 
 #RUN rm -rf /tmp/pip && \
 #    rm -rf /root/.cache
-RUN pip install --upgrade --trusted-host pypi.python.org \
+#RUN pip install -U setuptools 
+
+RUN pip install --trusted-host pypi.python.org \
  https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp36-cp36m-linux_x86_64.whl
 # Clean up pip wheel and Bazel cache when done.
 # TensorBoard
@@ -400,6 +402,11 @@ WORKDIR /home/docker/code
 RUN pip install -r /home/docker/code/requirements.txt
 
 
+#############################################################################
+# uwsgi instll 
+##########################################################################
+RUN conda install -c conda-forge uwsgi
+
 RUN rm -rf /tmp/pip && \
     rm -rf /root/.cache
 
@@ -468,8 +475,89 @@ COPY runtime/ ${PG_APP_HOME}/
 COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh
 
+################################################################################
+#NPM INSTALL NPM BUILD
+################################################################################
+RUN npm install --prefix /home/dev/tensormsa/gui/static
+#RUN npm run build --prefix /home/dev/tensormsa/gui/static
+
 #ENV HOSTNAME hostname
 
+################################################################################
+#NPM INSTALL NPM BUILD
+################################################################################
+RUN \ 
+    apt-get -qq update && apt-get -qq upgrade -y && \
+    apt-get -qq install -y \
+        wget \
+        unzip \
+        libtbb2 \
+        libtbb-dev && \
+    apt-get -qq install -y \
+        build-essential \ 
+        cmake \
+        git \
+        pkg-config \
+        libjpeg8-dev \
+        libtiff5-dev \
+        libjasper-dev \
+        libpng12-dev \
+        libgtk2.0-dev \
+        libavcodec-dev \
+        libavformat-dev \
+        libswscale-dev \
+        libv4l-dev \
+        libatlas-base-dev \
+        gfortran \
+        libhdf5-dev \
+        python3-pip && \
 
+    pip3 install --upgrade pip && \
+    pip3 install numpy && \
+
+    apt-get autoclean && apt-get clean && \
+
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# step 10 
+RUN \
+    cd ~ && \
+    wget https://github.com/Itseez/opencv/archive/3.2.0.zip && \
+    unzip 3.2.0.zip && \
+    mv ~/opencv-3.2.0/ ~/opencv/ && \
+    rm -rf ~/3.2.0.zip && \
+
+    cd ~ && \
+    wget https://github.com/opencv/opencv_contrib/archive/3.2.0.zip -O 3.2.0-contrib.zip && \
+    unzip 3.2.0-contrib.zip && \
+    mv opencv_contrib-3.2.0 opencv_contrib && \
+    rm -rf ~/3.2.0-contrib.zip && \
+
+    cd /root/opencv && \
+    mkdir build && \
+    cd build && \
+    cmake -D CMAKE_BUILD_TYPE=RELEASE \
+        -D CMAKE_INSTALL_PREFIX=/usr/local \
+        -D INSTALL_C_EXAMPLES=OFF \
+        -D INSTALL_PYTHON_EXAMPLES=ON \
+        -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
+        -D BUILD_EXAMPLES=ON .. && \
+
+    cd ~/opencv/build && \
+    make -j $(nproc) && \
+    make install && \
+    ldconfig && \
+
+    # clean opencv repos
+    rm -rf ~/opencv/build && \
+    rm -rf ~/opencv/3rdparty && \
+    rm -rf ~/opencv/doc && \
+    rm -rf ~/opencv/include && \
+    rm -rf ~/opencv/platforms && \
+    rm -rf ~/opencv/modules && \
+    rm -rf ~/opencv_contrib/build && \
+    rm -rf ~/opencv_contrib/doc
+
+#RUN cd ~ 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 
