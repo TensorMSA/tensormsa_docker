@@ -124,11 +124,13 @@
 ```
 
 <b> etc. Single Docker run command
-'''bash
+```bash
 nvidia-docker run -itd --env-file=".env" --name hoyai_dev -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 5901:5901 hoyai/tensormsa_dev_gpu_single:v1.0
 docker run -itd --env-file=".env" --name hoyai_dev -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 5901:5901 hoyai/tensormsa_dev_cpu_single:v1.0
-
-'''
+ 
+ docker run -itd --runtime=nvidia --env-file=".env" --name hoyai_dev -p 8989:8989 -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 5901:5901 --volume="/home/parksc/hoya_data/hoya_src_root:/hoya_src_root" --volume="/home/parksc/hoya_data/hoya_model_root:/hoya_model_root" --volume="/home/parksc/hoya_data/hoya_str_root:/hoya_str_root" --device=/dev/video0 hoyai/tensormsa_dev_gpu_single:v0.9
+ 
+```
 
 ![celery](./img/celery.jpg)
 ![juppter](./img/jupyter.jpg)
