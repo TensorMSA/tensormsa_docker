@@ -1,7 +1,7 @@
 # Trnsorflow r0.12
 # Ubuntu/Linux 64-bit Python 3.5
 #FROM nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
-FROM nvidia/cuda:8.0-cudnn6-runtime-ubuntu16.04
+FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 
 #FROM nvidia/cuda:8.0-cudnn6-runtime-ubuntu16.04
 MAINTAINER yewoo <intwis100@naver.com>
@@ -378,19 +378,33 @@ RUN apt-get update && \
         libtiff-dev \
         libjasper-dev \
         libavformat-dev \
-        libpq-dev
-
+        libpq-dev \
+        libopencv-dev \
+        libtiff5-dev libjpeg-dev libjasper-dev \
+        libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev libxine2-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libv4l-dev \
+        libtbb-dev \
+        libgtk2.0-dev \
+        libqt4-dev
 RUN pip install numpy
-
+RUN add-apt-repository ppa:jonathonf/ffmpeg-3 && \
+    add-apt-repository ppa:jonathonf/tesseract && \
+    apt-get update 
+RUN apt install -y ffmpeg libav-tools x264 x265
 WORKDIR /
-ENV OPENCV_VERSION="3.4.0"
+ENV OPENCV_VERSION="3.2.0"
+RUN wget https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip \
+&& unzip ${OPENCV_VERSION}.zip \ 
+&& rm ${OPENCV_VERSION}.zip
+
 RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
 && unzip ${OPENCV_VERSION}.zip \
 && mkdir /opencv-${OPENCV_VERSION}/cmake_binary \
 && cd /opencv-${OPENCV_VERSION}/cmake_binary \
 && cmake -DBUILD_TIFF=ON \
   -DBUILD_opencv_java=OFF \
+  -DWITH_FFMPEG=ON \
   -DWITH_CUDA=OFF \
+  -DWITH_QT=ON \
   -DENABLE_AVX=ON \
   -DWITH_OPENGL=ON \
   -DWITH_OPENCL=ON \
@@ -399,15 +413,17 @@ RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
   -DWITH_EIGEN=ON \
   -DWITH_V4L=ON \
   -DBUILD_TESTS=OFF \
+  -DOPENCV_EXTRA_MODULES_PATH=/opencv_contrib-${OPENCV_VERSION}/modules \
   -DBUILD_PERF_TESTS=OFF \
   -DCMAKE_BUILD_TYPE=RELEASE \
   -DCMAKE_INSTALL_PREFIX=$(python3.6 -c "import sys; print(sys.prefix)") \
   -DPYTHON_EXECUTABLE=$(which python3.6) \
   -DPYTHON_INCLUDE_DIR=$(python3.6 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
   -DPYTHON_PACKAGES_PATH=$(python3.6 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") .. \
-&& make install
+&& make -j4 install
 
-RUN cp /opencv-3.4.0/cmake_binary/lib/python3/cv2.cpython-36m-x86_64-linux-gnu.so /opt/conda/lib/python3.6/site-packages/cv2/
+RUN cp /opencv-3.2.0/cmake_binary/lib/python3/cv2.cpython-36m-x86_64-linux-gnu.so /opt/conda/lib/python3.6/site-packages/cv2/
+RUN dbus-uuidgen > /etc/machine-id
  
 #RUN cd ~ 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
