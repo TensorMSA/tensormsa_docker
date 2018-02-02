@@ -38,6 +38,8 @@ make install
 ldconfig
 
 
+docker run -it -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --runtime=nvidia --name hoyai_dev -p 8989:8989 -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 5901:5901 --volume="/home/Hyunsh/hoya_data/hoya_src_root:/hoya_src_root" --volume="/home/Hyunsh/hoya_data/hoya_model_root:/hoya_model_root" --volume="/home/Hyunsh/hoya_data/hoya_str_root:/hoya_str_root" --device=/dev/video0 hoyai/tensormsa_dev_gpu_single:v1.02 /bin/bash
+
 
 wget https://www.ffmpeg.org/releases/ffmpeg-3.1.11.tar.gz
 
