@@ -171,9 +171,12 @@ RUN echo "export PATH=${PYTHON_HOME}/bin:$PATH" >> ~/.bashrc
 #############################################################################
 # chrome                                                                    #
 #############################################################################
-RUN apt-get update && apt-get install -y chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg && rm -rf /var/lib/apt/lists/*
-RUN ln -s /usr/bin/chromium-browser /usr/bin/google-chrome
-RUN echo "CHROMIUM_FLAGS='--no-sandbox --start-maximized --user-data-dir'" > ~/.chromium-browser.init
+#RUN apt-get update && apt-get install -y chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg && rm -rf /var/lib/apt/lists/*
+#RUN ln -s /usr/bin/chromium-browser /usr/bin/google-chrome
+#RUN echo "CHROMIUM_FLAGS='--no-sandbox --start-maximized --user-data-dir'" > ~/.chromium-browser.init
+
+
+
 
 #############################################################################
 # naver nanum font                                                          #
@@ -391,17 +394,6 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 RUN apt-get update && apt-get install -y --no-install-recommends memcached python-memcache && rm -rf /var/lib/apt/lists/*
 
-
-############################################################################
-# pip & entrypoint setting                                #
-#############################################################################
-RUN apt-get clean
-
-COPY requirements.txt /home/docker/code/requirements.txt
-WORKDIR /home/docker/code
-RUN pip install -r /home/docker/code/requirements.txt
-
-
 #############################################################################
 # uwsgi instll 
 ##########################################################################
@@ -472,8 +464,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends cmake libboost-
 
 
 COPY runtime/ ${PG_APP_HOME}/
-COPY entrypoint.sh /sbin/entrypoint.sh
-RUN chmod 755 /sbin/entrypoint.sh
+#COPY entrypoint.sh /sbin/entrypoint.sh
+#RUN chmod 755 /sbin/entrypoint.sh
 
 ################################################################################
 #NPM INSTALL NPM BUILD
@@ -489,28 +481,12 @@ RUN npm install --prefix /home/dev/tensormsa/gui/static
 RUN \ 
     apt-get -qq update && apt-get -qq upgrade -y && \
     apt-get -qq install -y \
-        wget \
-        unzip \
-        libtbb2 \
-        libtbb-dev && \
-    apt-get -qq install -y \
-        build-essential \ 
-        cmake \
-        git \
-        pkg-config \
-        libjpeg8-dev \
-        libtiff5-dev \
-        libjasper-dev \
-        libpng12-dev \
-        libgtk2.0-dev \
-        libavcodec-dev \
-        libavformat-dev \
-        libswscale-dev \
-        libv4l-dev \
-        libatlas-base-dev \
-        gfortran \
-        libhdf5-dev \
-        python3-pip && \
+    build-essential cmake git pkg-config \
+    libjpeg8-dev libtiff5-dev libjasper-dev libpng12-dev \
+    libavcodec-dev libavformat-dev libswscale-dev libv4l-dev \
+    libgtk2.0-dev \
+    libatlas-base-dev gfortran \
+    python3-pip && \
 
     pip3 install --upgrade pip && \
     pip3 install numpy && \
@@ -522,42 +498,60 @@ RUN \
 # step 10 
 RUN \
     cd ~ && \
-    wget https://github.com/Itseez/opencv/archive/3.2.0.zip && \
-    unzip 3.2.0.zip && \
-    mv ~/opencv-3.2.0/ ~/opencv/ && \
-    rm -rf ~/3.2.0.zip && \
+    wget https://github.com/Itseez/opencv/archive/3.4.0.zip && \
+    unzip 3.4.0.zip && \
+    mv ~/opencv-3.4.0/ ~/opencv/ && \
+    rm -rf ~/3.4.0.zip && \
 
     cd ~ && \
-    wget https://github.com/opencv/opencv_contrib/archive/3.2.0.zip -O 3.2.0-contrib.zip && \
-    unzip 3.2.0-contrib.zip && \
-    mv opencv_contrib-3.2.0 opencv_contrib && \
-    rm -rf ~/3.2.0-contrib.zip && \
+    wget https://github.com/opencv/opencv_contrib/archive/3.4.0.zip -O 3.4.0-contrib.zip && \
+    unzip 3.4.0-contrib.zip && \
+    mv opencv_contrib-3.4.0 opencv_contrib && \
+    rm -rf ~/3.4.0-contrib.zip && \
 
     cd /root/opencv && \
     mkdir build && \
     cd build && \
     cmake -D CMAKE_BUILD_TYPE=RELEASE \
-        -D CMAKE_INSTALL_PREFIX=/usr/local \
-        -D INSTALL_C_EXAMPLES=OFF \
-        -D INSTALL_PYTHON_EXAMPLES=ON \
-        -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
-        -D BUILD_EXAMPLES=ON .. && \
-
+     -D INSTALL_C_EXAMPLES=ON \
+     -D INSTALL_PYTHON_EXAMPLES=ON \
+     -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
+     -D BUILD_EXAMPLES=ON \
+     -DCMAKE_INSTALL_PREFIX=$(python3.6 -c "import sys; print(sys.prefix)") \
+     -DPYTHON_EXECUTABLE=$(which python3.6) \
+     -DPYTHON_INCLUDE_DIR=$(python3.6 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
+     -DPYTHON_PACKAGES_PATH=$(python3.6 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") .. && \
     cd ~/opencv/build && \
     make -j $(nproc) && \
     make install && \
-    ldconfig && \
+    ldconfig 
 
-    # clean opencv repos
-    rm -rf ~/opencv/build && \
-    rm -rf ~/opencv/3rdparty && \
-    rm -rf ~/opencv/doc && \
-    rm -rf ~/opencv/include && \
-    rm -rf ~/opencv/platforms && \
-    rm -rf ~/opencv/modules && \
-    rm -rf ~/opencv_contrib/build && \
-    rm -rf ~/opencv_contrib/doc
-
+RUN cp /root/opencv/build/lib/python3/cv2.cpython-36m-x86_64-linux-gnu.so /opt/conda/lib/python3.6/site-packages/cv2
 #RUN cd ~ 
-ENTRYPOINT ["/sbin/entrypoint.sh"]
+########################################################################
+#     CHROME                                                          #   
+########################################################################
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+apt-get update && apt-get install -y --no-install-recommends xdg-utils  libxss1 libgconf2-4 libappindicator1 libindicator7 fonts-liberation && \
+dpkg -i google-chrome-stable_current_amd64.deb
+## Chrome run as root
+RUN sed -i '$s/$/ --no-sandbox/' /opt/google/chrome/google-chrome
 
+############################################################################
+# pip & entrypoint setting                                #
+#############################################################################
+RUN apt-get clean
+
+COPY requirements.txt /home/docker/code/requirements.txt
+WORKDIR /home/docker/code
+RUN pip install -r /home/docker/code/requirements.txt
+
+
+COPY entrypoint.sh /sbin/entrypoint.sh
+RUN chmod 755 /sbin/entrypoint.sh
+
+COPY Xvnc4.conf /etc/supervisor/conf.d/Xvnc4.conf
+COPY vncstart.sh /etc/supervisor/conf.d/vncstart.sh
+
+#CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+ENTRYPOINT ["/sbin/entrypoint.sh"]

@@ -1,0 +1,46 @@
+#!/bin/bash --no-sandbox
+# --no-sandbox
+# Copyright (c) 2011 The Chromium Authors. All rights reserved. --no-sandbox
+# Use of this source code is governed by a BSD-style license that can be --no-sandbox
+# found in the LICENSE file. --no-sandbox
+ --no-sandbox
+# Let the wrapped binary know that it has been run through the wrapper. --no-sandbox
+export CHROME_WRAPPER="`readlink -f "$0"`" --no-sandbox
+ --no-sandbox
+HERE="`dirname "$CHROME_WRAPPER"`" --no-sandbox
+ --no-sandbox
+# We include some xdg utilities next to the binary, and we want to prefer them --no-sandbox
+# over the system versions when we know the system versions are very old. We --no-sandbox
+# detect whether the system xdg utilities are sufficiently new to be likely to --no-sandbox
+# work for us by looking for xdg-settings. If we find it, we leave $PATH alone, --no-sandbox
+# so that the system xdg utilities (including any distro patches) will be used. --no-sandbox
+if ! which xdg-settings &> /dev/null; then --no-sandbox
+  # Old xdg utilities. Prepend $HERE to $PATH to use ours instead. --no-sandbox
+  export PATH="$HERE:$PATH" --no-sandbox
+else --no-sandbox
+  # Use system xdg utilities. But first create mimeapps.list if it doesn't --no-sandbox
+  # exist; some systems have bugs in xdg-mime that make it fail without it. --no-sandbox
+  xdg_app_dir="${XDG_DATA_HOME:-$HOME/.local/share/applications}" --no-sandbox
+  mkdir -p "$xdg_app_dir" --no-sandbox
+  [ -f "$xdg_app_dir/mimeapps.list" ] || touch "$xdg_app_dir/mimeapps.list" --no-sandbox
+fi --no-sandbox
+ --no-sandbox
+# Always use our versions of ffmpeg libs. --no-sandbox
+# This also makes RPMs find the compatibly-named library symlinks. --no-sandbox
+if [[ -n "$LD_LIBRARY_PATH" ]]; then --no-sandbox
+  LD_LIBRARY_PATH="$HERE:$HERE/lib:$LD_LIBRARY_PATH" --no-sandbox
+else --no-sandbox
+  LD_LIBRARY_PATH="$HERE:$HERE/lib" --no-sandbox
+fi --no-sandbox
+export LD_LIBRARY_PATH --no-sandbox
+ --no-sandbox
+export CHROME_VERSION_EXTRA="stable" --no-sandbox
+ --no-sandbox
+# We don't want bug-buddy intercepting our crashes. http://crbug.com/24120 --no-sandbox
+export GNOME_DISABLE_CRASH_DIALOG=SET_BY_GOOGLE_CHROME --no-sandbox
+ --no-sandbox
+# Sanitize std{in,out,err} because they'll be shared with untrusted child --no-sandbox
+# processes (http://crbug.com/376567). --no-sandbox
+exec < /dev/null --no-sandbox
+exec > >(exec cat) --no-sandbox
+exec 2> >(exec cat >&2) --no-sandbox--no-sandxob--no-sandxob222222222
