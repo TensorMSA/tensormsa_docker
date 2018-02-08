@@ -144,12 +144,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends xauth && rm -rf
 RUN mkdir /home/dev
 RUN cd /home/dev
 WORKDIR /home/dev
-RUN wget --no-check-certificate https://download.jetbrains.com/python/pycharm-community-2017.1.2.tar.gz
+RUN wget --no-check-certificate https://download.jetbrains.com/python/pycharm-community-2017.3.3.tar.gz
 
-RUN tar -xvf pycharm-community-2017.1.2.tar.gz
-RUN mv pycharm-community-2017.1.2 pyc
+RUN tar -xvf pycharm-community-2017.3.3.tar.gz
+RUN mv pycharm-community-2017.3.3 pyc
 RUN ln -s /home/dev/pyc/bin/pycharm.sh /usr/bin/pycharm
-RUN rm -f pycharm-community-2017.1.2.tar.gz
+RUN rm -f pycharm-community-2017.3.3.tar.gz
 
 #############################################################################
 # firefox                                                                   #
@@ -546,12 +546,20 @@ COPY requirements.txt /home/docker/code/requirements.txt
 WORKDIR /home/docker/code
 RUN pip install -r /home/docker/code/requirements.txt
 
+COPY requirements.txt /home/docker/code/requirements2.txt
+WORKDIR /home/docker/code
+RUN pip install -r /home/docker/code/requirements2.txt
+
 
 COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh
 
 COPY Xvnc4.conf /etc/supervisor/conf.d/Xvnc4.conf
 COPY vncstart.sh /etc/supervisor/conf.d/vncstart.sh
+COPY ssh.conf /etc/supervisor/conf.d/ssh.conf
+COPY rabbitmq.sh /etc/supervisor/conf.d/rabbitmq.sh
+COPY rabbitmq.conf /etc/supervisor/conf.d/rabbitmq.conf
 
+RUN mkdir /var/run/sshd
 #CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
 ENTRYPOINT ["/sbin/entrypoint.sh"]

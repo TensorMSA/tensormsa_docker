@@ -21,3 +21,4 @@ hanja==0.11.0
 ngram==3.3.2
 dlib
 wget
+cx_Oracle
