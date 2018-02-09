@@ -174,7 +174,7 @@ cd /home/dev/tensormsa_docker/docker_cpu
 
 
 # Lunch Tensormsa Docker
-docker run -it --env-file=.env -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --name hoyai_dev --privileged -p 8989:8989 -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 5901:5901 -p 5902:5902 --volume="/hoya_data/hoya_src_root:/hoya_src_root" --volume="/hoya_data/hoya_model_root:/hoya_model_root" --volume="/hoya_data/hoya_str_root:/hoya_str_root" hoyai/hoyai_dev_cpu_single:v1.02
+docker run -it --env-file=.env -e DISPLAY=$DISPLAY --shm-size=256m -v /tmp/.X11-unix:/tmp/.X11-unix --name hoyai_dev --privileged -p 8989:8989 -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 5901:5901 -p 5902:5902 --volume="/hoya_data/hoya_src_root:/hoya_src_root" --volume="/hoya_data/hoya_model_root:/hoya_model_root" --volume="/hoya_data/hoya_str_root:/hoya_str_root" hoyai/hoyai_dev_cpu_single:v1.02
 
 
 # Register Service for Tensorsa Docker
