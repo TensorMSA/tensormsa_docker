@@ -9,6 +9,8 @@
  - 17.3.1 : Tensorflow 1.0, RabbitMQ, Vnc Server, Xfce4 Installed  </br>
  - 17.4.11: Tensorflow 1.1(Complie), Neo4j, flower, mecab Installed   </br>
  - 17.8.23 : Django Rest, nginx, postgres, celery (official version) composed by Docker-compose</br>
+ - 18.2.9 : Single Cpu Developer Vesion update
+ - 18.2.9 : Add Opencv Compile Version , Dlib, Never Crashed Chrome
 
 <b>Summeries</b> </br>
  - python 3.5
@@ -135,3 +137,70 @@ docker run -itd --env-file=".env" --name hoyai_dev -p 5672:5672 -p 2266:2266 -p 
 ![celery](./img/celery.jpg)
 ![juppter](./img/jupyter.jpg)
 ![vnc](./img/vnc.jpg)
+
+<b> Developer Version Single Docker
+
+```bash
+# Docker install
+sudo apt-get update
+ 
+sudo apt-get install \
+  apt-transport-https \
+  ca-certificates \
+  curl \
+  software-properties-common
+    
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -    
+
+sudo apt-key fingerprint 0EBFCD88
+
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+   
+sudo apt-get update   
+
+sudo apt-get install docker-ce
+
+# TensorMsa Docker git Clone
+sudo mkdir /home/dev
+
+cd /home/dev 
+
+sudo git clone https://github.com/TensorMSA/tensormsa_docker.git
+
+cd /home/dev/tensormsa_docker/docker_cpu
+
+
+# Lunch Tensormsa Docker
+docker run -it --env-file=.env -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --name hoyai_dev --privileged -p 8989:8989 -p 5672:5672 -p 2266:2266 -p 5432:5432 -p 8000:8000 -p 6006:6006 -p 5901:5901 -p 5902:5902 --volume="/hoya_data/hoya_src_root:/hoya_src_root" --volume="/hoya_data/hoya_model_root:/hoya_model_root" --volume="/hoya_data/hoya_str_root:/hoya_str_root" hoyai/hoyai_dev_cpu_single:v1.02
+
+
+# Register Service for Tensorsa Docker
+cd /etc/systemd/system/
+vi docker_hoyai.service
+
+[Unit]
+Description=hoyai container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a hoyai_dev
+ExecStop=/usr/bin/docker stop -t 2 hoyai_dev
+
+[Install]
+WantedBy=default.target
+
+For Start
+sudo systemctl enable docker_hoyai.service
+sudo systemctl start docker_hoyai.service
+
+For Stop
+sudo systemctl stop docker_hoyai.service
+sudo systemctl disable docker_hoyai.service
+ 
+```
+
